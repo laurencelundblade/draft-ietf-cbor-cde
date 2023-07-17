@@ -9,14 +9,14 @@ stream: IETF
 
 date:
 consensus: true
-area: ART
-workgroup: CBOR Working Group
+area: "Applications and Real-Time"
+workgroup: "Concise Binary Object Representation Maintenance and Extensions"
 keyword:
 
 venue:
-  group: CBOR
-  mail: cbor@ietf.org
-  github: cabo/det
+  group: "Concise Binary Object Representation Maintenance and Extensions"
+  mail: "cbor@ietf.org"
+  github: "cabo/det"
 
 author:
   -
