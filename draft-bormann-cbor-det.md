@@ -614,7 +614,7 @@ implementation of the application transformations.
 This section describes some of the considerations that led to one such
 application profile for Deterministic Encoding.
 
-## Numeric Reduction in dCBOR
+## Numeric Reduction in dCBOR {#reduction}
 
 The dCBOR specification (originally in {{-dcbor-orig}}, with a condensed form
 proposed in {{-dcbor}}) describes the pervasive use of Deterministic
@@ -656,6 +656,36 @@ Deterministic Encoding requires.
 
 A streamlined specification is proposed in {{-dcbor}}.
 
+# Using Deterministically Encoded CBOR as a Deterministic Encoding of JSON
+
+Certain applications could make use of a Deterministic Encoding for
+JSON {{STD90}} data.
+Deterministically Encoded CBOR provides an attractive solution to that
+as it is already well-defined.
+
+While the data model of JSON is not well-defined, I-JSON provides one
+interpretation that is generally accepted {{-ijson}}.
+{{Section 6.2 (Converting from JSON to CBOR) of STD94}} provides a way
+to transform JSON data that conform to this data model to CBOR.
+When used with its default parameters, the combination of (1) I-JSON,
+(2) the
+JSON-to-CBOR transformation, and (3) the rules for CBOR Deterministic
+Encoding provide a well-defined Deterministic Encoding for JSON data.
+
+Transforming decoded CBOR data after interchange back to data-model
+level JSON data can be done with the inverse of {{Section 6.2 of STD94}}
+(the full generality of {{Section 6.1 (Converting from CBOR to JSON) of
+STD94}} is obviously not required as only the JSON subset of the CBOR
+generic data model is used).
+
+Comparing the handling of numeric data in the JSON-to-CBOR
+transformation to that reported in {{reduction}}, the main difference is
+that the former only maps integral values between
+`-2`<sup>53</sup>`+1` and `2`<sup>53</sup>`-1` to basic CBOR integers
+and leaves the others in floating point form.
+(The rationale is that only this range is injective ("unambiguous" or
+"exact") in the mapping of integers to binary64 floating point
+values.)
 
 # Security Considerations
 
