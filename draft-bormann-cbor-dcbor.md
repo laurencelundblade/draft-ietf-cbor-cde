@@ -131,6 +131,10 @@ construction CBOR data items:
    original floating point value is used for encoding.
    (Specifically, conversion to a bignum is never considered.)
 
+   This also means that the three representations of a zero number in CBOR
+   (0, 0.0, -0.0 in diagnostic notation) are all reduced to the basic
+   integer 0 (with preferred encoding 0x00).
+
    Note that this reduction can turn valid maps into invalid ones, as it
    can create duplicate keys, e.g., for:
 
@@ -154,6 +158,12 @@ of the original value, e.g., a dCBOR-based application that expects a
 floating point value needs to accept a basic integer value in its
 place (and, if needed, convert it to a floating point value for
 further processing).
+
+dCBOR-based applications MUST NOT accept numbers that have not been
+reduced as specified in this section, except maybe when there has been
+an explicit request to make the unreduced numbers available for their
+diagnostic value.  This is similar to a checking flag mentioned in
+Section 5.1 (API Considerations) of {{-det}} being set by default.
 
 # Implementation Status
 {:removeinrfc}

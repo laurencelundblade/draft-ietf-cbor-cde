@@ -641,13 +641,11 @@ less well integrated into the language and existing libraries than the
 general numeric type.)
 
 The original specification {{-dcbor-orig}} restated much of {{Section 4.2 of STD94}} and
-added rules of questionable value (e.g., special casing the single value
-`-2`<sup>64</sup> based on considerations that probably apply to the
-entire range from `-2`<sup>64</sup> to `-2`<sup>63</sup>`+1`).
-It mentioned, but did not specify the handling of
-negative zero (`-0.0`) floating point values.
+added a rule that doesn't allow compatibility with Deterministic
+Encoding (disallowing the interchange of basic negative integers in the range
+`-2`<sup>64</sup> to -`2`<sup>63</sup>`-1`).
 
-It also had an ominous mention of subnormal values {{IEEE754}}, which
+It also had a mention as future work of subnormal values {{IEEE754}}, which
 work fine (even with Deterministic Encoding) in {{STD94}} but may
 require special handling when implementations that implement the FTZ
 ("flush to zero") and/or DAZ ("denormals are zero") strategies at the
