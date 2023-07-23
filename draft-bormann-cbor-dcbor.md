@@ -173,10 +173,11 @@ place (and, if needed, convert it to a floating point value for
 further processing).
 
 dCBOR-based applications MUST NOT accept numbers that have not been
-reduced as specified in this section, except maybe when there has been
-an explicit request to make the unreduced numbers available for their
-diagnostic value.  This is similar to a checking flag mentioned in
-Section 5.1 (API Considerations) of {{-det}} being set by default.
+reduced as specified in this section, except maybe by making the
+unreduced numbers available for their diagnostic value when there has
+been an explicit request to do so.
+This is similar to a checking flag mentioned in Section 5.1 (API
+Considerations) of {{-det}} being set by default.
 
 # Implementation Status
 {:removeinrfc}
