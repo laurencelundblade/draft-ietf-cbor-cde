@@ -123,7 +123,8 @@ the Preferred Serialization practice by providing rules for
 The objective of Deterministic Encoding is to, deterministically,
 always produce the same encoding for data items that are equivalent at
 the data model level.
-To achieve this, an encoding choice intended for incremental encoding
+To achieve this, Preferred Serialization is mandated, an encoding choice
+intended for incremental encoding
 (indefinite length encoding) is disabled, and additional effort is
 expended for encoding key/value pairs in maps (the order of which
 does not matter semantically) in a deterministic order anyway.
@@ -131,7 +132,7 @@ does not matter semantically) in a deterministic order anyway.
 Given that additional effort needs to be expended and/or implementation
 choices are taken away, neither Preferred Serialization nor
 Deterministic Encoding are mandatory in CBOR.
-(Contrast this with UTF-8 ({{Section 3 of STD63}}), which is treating as
+(Contrast this with UTF-8 ({{Section 3 of STD63}}), which is always treating as
 "invalid" any encoding variants that are longer than necessary.)
 
 Deterministic Encoding is defined in {{Section 4.2 of STD94}} (note
@@ -150,15 +151,15 @@ The definitions of {{STD94}} apply.
 Readers are expected to be familiar with CBOR, and particularly so with
 {{Sections 4.1 and 4.2 of STD94}}.
 
-The following terms defined in the text of {{STD94}} receive their own
+The following terms introduced in the text of {{STD94}} receive their own
 separate definitions here:
 
 Preferred Serialization:
 : a set of choices made during Serialization (Encoding) that generally
   leads to shortest-form encodings where a choice of encoding lengths
   is available, without expending additional effort on converting
-  between different kinds of data item. See {{Section 4.1 of STD94}} and
-  the terms defined in that section.
+  between different kinds of data item.
+  See {{Section 4.1 of STD94}} and the terms defined in that section.
   The Preferred Encoding rules for data items in the Basic Generic
   Data Model may be augmented by rules for specific Tags, see for
   instance {{Section 3.4.3 of STD94}}.
@@ -170,13 +171,14 @@ Deterministic Encoding:
 : An encoding process that employs Preferred Serialization and makes
   additional decisions to always (deterministically) lead to the
   exact same encoding for equivalent inputs at the data model level.
-  As with Preferred Serialization, the equivalence model as defined
+  Similar to Preferred Serialization, the equivalence model as defined
   for the Basic Generic Data Model may be augmented by equivalence
-  rules defined for Tags (see also {{Section 2.1 of STD94}}).
+  rules defined for specific Tags (see also {{Section 2.1 of STD94}}).
 
 CBOR data items at the data model level are represented in the CBOR
 diagnostic notation ({{Section 8 of STD94}} as extended by {{Appendix G of -cddl}},
-further elaborated in {{-edn}}).
+further elaborated in {{-edn}}), abbreviated with "EDN" (extended
+diagnostic notation).
 
 While this document is informative, it does use certain keywords to
 indicate practical requirements for interoperability.
@@ -226,7 +228,9 @@ context of the reply has not changed.
 
 If two requests that are semantically the same also have the same
 representation, the representation (or its hash) can serve as an
-efficient cache key.
+efficient cache key.  If the request is already encoded
+deterministically, this is by definition the case; alternatively, the
+recipient can re-encode a request with Deterministic Encoding.
 
 Were the Deterministic Encoding to fail, this could lead to cache failures, which
 could be benign, but also could be specifically evoked by an active
@@ -344,6 +348,15 @@ such a date/time, or to exceptionally encode the rare leap second with Tag 0.)
 
 ### Example with Major Types 0, 1, and 7, and Tags 2 and 3 {#numeric}
 
+{:aside}
+>
+In some of the following examples, we will use the number
+65 536 000 000 (or its floating-point form, 65536000000.0, in
+diagnostic notation), as it has
+both binary and non-binary (decimal) factors: it is equal to
+`2`<sup>16</sup>⋅`10`<sup>6</sup> (and thus to
+`2`<sup>22</sup>⋅`5`<sup>6</sup>).
+
 CBOR has four different sets of numeric representations:
 
 * Major types 0 and 1.
@@ -373,6 +386,7 @@ CBOR has four different sets of numeric representations:
   could provide a 64-bit signed integer range separate from a bignum-based
   arbitrary size integer range that is outside 64-bit signed space, and
   would map half of the 65-bit space into the arbitrary size range.
+
 
   Note that, accordingly, Preferred Encoding as defined in {{Section
   3.4.3 of STD94}} selects the shortest encoding in major type 0/1
@@ -412,7 +426,7 @@ CBOR has four different sets of numeric representations:
   binary16 (0xf93e00) because that representation is the shortest floating
   point that provides the range and precision needed for this value.
   (Bulk encoding of floating point values, where the need for detection of this
-  situation might cause a performance limitation, are handled by
+  situation might cause a performance limitation, is handled by
   tagged arrays {{-array}}.)
 
   While the three major type 7 floating point representations are
@@ -435,16 +449,18 @@ CBOR has four different sets of numeric representations:
   fa 51 74 24 00
   ~~~
 
-  which would be considered to be the separate floating point value
+  which would be considered to be the semantically separate floating point value
   65536000000.0 (CBOR diagnostic notation).
 
 
 * Tag 4 and 5 (decimal fractions, "bigfloats")
 
-  Instead of adopting further formats from {{IEEE754}}, CBOR defines two
-  tags for general binary floating point numbers ("bigfloats") and for
-  general decimal floating point (decimal fractions), which can be
-  used for extended precision representation.  {{Section 3.4.4 of
+  Instead of adopting further formats such as decimal64 or binary128 from
+  {{IEEE754}}, CBOR defines two generalized tags that can be used for extended
+  precision representation: Tag 5 for general binary floating point
+  numbers ("bigfloats") and Tag 4 for general decimal floating point
+  (decimal fractions).
+ {{Section 3.4.4 of
   STD94}} also states that "Bigfloats may also be used by constrained
   applications that need some basic binary floating-point capability
   without the need for supporting IEEE 754", while decimal fractions
@@ -457,6 +473,7 @@ CBOR has four different sets of numeric representations:
   Neither bigfloats nor decimal fractions provide rules for preferred
   encoding, except implicitly by providing a choice between basic
   integer and bignum representation for the mantissa value that will
+  in turn
   be governed by the preferred encoding rules for integers.
   Beyond that, the assumption is that these Tags create separate
   number spaces, and that any deterministic representation of numbers
@@ -505,13 +522,15 @@ such a mechanism in practice.
 
 ## The Need for Maps
 
-Maps are an important data structure in the CBOR generic data model to
+As an extension to JSON objects in JSON {{STD90}},
+maps are an important data structure in the CBOR generic data model to
 obtain extensibility of "struct"-like data (see {{Section 2 of
 RFC8610}}).
 Where this is not needed or can be provided in another way, expressing
 the entire data item without the use of maps can be an efficient
-option.
-(This requires ensuring that the same uncertainty then does not occur
+option, avoiding any additional processing for Deterministic Encoding
+beyond that needed for Preferred Encoding.
+(This requires ensuring that a similar kind of uncertainty then does not occur
 at the application level, though.)
 
 # Implementation Considerations for Deterministic Encoding
@@ -530,7 +549,7 @@ by flagging elements with error codes.  It is often useful to give the
 application full information about well-formed CBOR that is not
 deterministically encoded even when it should be.
 However, if a flag for checking is provided and switched on, there
-should be no chance that any other decoded data item is mistaken for
+SHOULD be no chance that any other decoded data item is mistaken for
 one that was encoded deterministically.
 
 As reordering maps for Deterministic Encoding is relatively expensive,
@@ -584,13 +603,14 @@ a map key to perform the overall map content ordering.
 
 # Application Profiles of Deterministic Encoding
 
-Applications are encouraged to define rules for representing
+To enable the use of generic encoders,
+applications are encouraged to define rules for representing
 application information in the CBOR generic data model that enable
 the use of Preferred Encoding on that level as well.
 
 Applications can also define their own deterministic encoding rules,
 as for instance FIDO CTAP2 (Client to Authenticator Protocol {{CTAP2}})
-does with the CTAP2 canonical CBOR encoding form.
+does with the *CTAP2 canonical CBOR encoding form* (Section 6 of {{CTAP2}}).
 Its description appears
 to be derived from an equivalent of {{Section 4.2.3 of STD94}}.
 (The actual
@@ -602,9 +622,10 @@ longer be the case.)
 Application-specific deterministic encoding rules can make it
 difficult to use existing generic encoders and may therefore diminish
 the value of using a standard representation format.
-However, applications can also define transformations of their input
+However, applications can also define transformations of their data
 into a more limited data model that reduces the cases the
-Deterministic Encoding rules have to implement.  This allows either
+Deterministic Encoding rules have to implement.
+This allows both the following implementation choices:
 
 * the use of generic encoders with standard Deterministic Encoding
 rule implementations after some application processing, or
@@ -635,7 +656,7 @@ cases, the shortest form for the case will then be used for encoding.
 
 Reducing the separate integer and floating point spaces to a single
 numeric space is particularly attractive in implementation languages that
-also only have such a single space, such as JavaScript {{ECMA262}}.
+also only have a single such space, such as JavaScript {{ECMA262}}.
 (While JavaScript recently has acquired a separate integer type, it is much
 less well integrated into the language and existing libraries than the
 general numeric type.)
@@ -646,15 +667,18 @@ Encoding (disallowing the interchange of basic negative integers in the range
 `-2`<sup>64</sup> to -`2`<sup>63</sup>`-1`).
 
 It also had a mention as future work of subnormal values {{IEEE754}}, which
-work fine (even with Deterministic Encoding) in {{STD94}} but may
-require special handling when implementations that implement the FTZ
-("flush to zero") and/or DAZ ("denormals are zero") strategies at the
-application level need to
-interoperate with ones that don't — it is generally difficult to
+work fine for interchange (even with Deterministic Encoding) in
+{{STD94}}.
+Note that specific values may not be available to applications that
+employ floating point hardware implementing the FTZ ("flush to zero")
+and/or DAZ ("denormals are zero") strategies.
+These may then require special handling in the application data model.
+It is generally difficult to
 rely on exact equality of floating point values, which however is what
 Deterministic Encoding requires.
 
-A streamlined specification is proposed in {{-dcbor}}.
+A streamlined specification of the dCBOR numeric-reduction based
+application profile is proposed in {{-dcbor}}.
 
 # Using Deterministically Encoded CBOR as a Deterministic Encoding of JSON
 
@@ -685,7 +709,8 @@ that the former only maps integral values between
 and leaves the others in floating point form.
 (The rationale is that only this range is injective ("unambiguous" or
 "exact") in the mapping of integers to binary64 floating point
-values.)
+values, which may be a desirable property beyond the use in JSON
+encoding.)
 
 # Security Considerations
 
