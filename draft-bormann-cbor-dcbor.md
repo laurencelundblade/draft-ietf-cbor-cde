@@ -122,10 +122,17 @@ one:
 Both dCBOR processing and standard CBOR processing can be combined
 into a special dCBOR/CBOR encoder/decoder.
 
-## Numeric reduction
+This application profile is intended to be used in conjunction with an
+application, which typically will use a subset of CBOR, which in turn
+influences which subset of the application profile is used.
+As a result, this application profile places no direct requirement on what
+subset of CBOR is implemented.
+For instance, there is no requirement that dCBOR implementations
+support floating point numbers (or any other kind of number, such as
+arbitrary precision integers or 64-bit negative integers) when they
+are used with applications that do not use them.
 
-Note that this application profile places no requirement that dCBOR
-implementations support floating point numbers.
+## Numeric reduction
 
 dCBOR implementations that do support floating point numbers MUST
 perform the following two reductions of numeric values when
