@@ -51,9 +51,6 @@ normative:
 informative:
   I-D.bormann-cbor-det:
     -: det
-    title: "CBOR: On Deterministic Encoding"
-    author:
-      name: Carsten Bormann
   I-D.mcnally-deterministic-cbor: dcbor-orig
   bc-dcbor-ts:
     title: "Blockchain Commons Deterministic CBOR (\"dCBOR\") for TypeScript"
