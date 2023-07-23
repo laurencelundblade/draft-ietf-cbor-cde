@@ -129,7 +129,7 @@ implementations support floating point numbers.
 
 dCBOR implementations that do support floating point numbers MUST
 perform the following two reductions of numeric values when
-construction CBOR data items:
+constructing CBOR data items:
 
 1. When representing integral floating point values (floating point
    values with a zero fractional part), check whether the
