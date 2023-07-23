@@ -55,17 +55,30 @@ informative:
     author:
       name: Carsten Bormann
   I-D.mcnally-deterministic-cbor: dcbor-orig
-  SwiftDCBOR:
-    title: "Deterministic CBOR (\"dCBOR\") for Swift."
+  bc-dcbor-ts:
+    title: "Blockchain Commons Deterministic CBOR (\"dCBOR\") for TypeScript"
+    target: https://github.com/BlockchainCommons/bc-dcbor-ts
+  BCSwiftDCBOR:
+    title: "Blockchain Commons Deterministic CBOR (\"dCBOR\") for Swift"
     target: https://github.com/BlockchainCommons/BCSwiftDCBOR
-  RustDCBOR:
-    title: "Deterministic CBOR (\"dCBOR\") for Rust."
+  bc-dcbor-rust:
+    title: "Blockchain Commons Deterministic CBOR (\"dCBOR\") for Rust"
     target: https://github.com/BlockchainCommons/bc-dcbor-rust
   cbor-dcbor:
     author:
       name: Carsten Bormann
     title: PoC of the McNally/Allen "dCBOR" application-level CBOR representation rules
     target: https://github.com/cabo/cbor-dcbor
+  cbor-diag:
+    author:
+      name: Carsten Bormann
+    title: CBOR diagnostic utilities
+    target: https://github.com/cabo/cbor-diag
+  cbor-deterministic:
+    author:
+      name: Carsten Bormann
+    title: cbor-deterministic gem
+    target: https://github.com/cabo/cbor-deterministic
 
 
 --- abstract
@@ -170,10 +183,24 @@ Section 5.1 (API Considerations) of {{-det}} being set by default.
 
 {::boilerplate rfc7942info}
 
+## TypeScript
+
+* Implementation Location: {{bc-dcbor-ts}}
+
+* Primary Maintainer:
+
+* Languages: TypeScript (transpiles to JavaScript)
+
+* Coverage:
+
+* Testing:
+
+* Licensing:
+
 ## Swift
 
 
-* Implementation Location: {{SwiftDCBOR}}
+* Implementation Location: {{BCSwiftDCBOR}}
 
 * Primary Maintainer:
 
@@ -183,11 +210,11 @@ Section 5.1 (API Considerations) of {{-det}} being set by default.
 
 * Testing:
 
-* Licensing:
+* Licensing: BSD-2-Clause-Patent
 
 ## Rust
 
-* Implementation Location: {{RustDCBOR}}
+* Implementation Location: {{bc-dcbor-rust}}
 
 * Primary Maintainer:
 
@@ -197,7 +224,7 @@ Section 5.1 (API Considerations) of {{-det}} being set by default.
 
 * Testing:
 
-* Licensing:
+* Licensing: Custom
 
 ## Ruby
 
@@ -207,7 +234,9 @@ Section 5.1 (API Considerations) of {{-det}} being set by default.
 
 * Languages: Ruby
 
-* Coverage:
+* Coverage: Complete specification; complemented by CBOR
+  encoder/decoder and command line interface from {{cbor-diag}} and
+  deterministic encoding from {{cbor-deterministic}}
 
 * Testing:
 
