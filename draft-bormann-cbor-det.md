@@ -71,9 +71,6 @@ informative:
   I-D.ietf-cbor-edn-literals: edn
   I-D.bormann-cbor-dcbor:
     -: dcbor
-    title: dCBOR – an Application Profile for Use with CBOR Deterministic Encoding
-    author:
-      name: Carsten Bormann
   I-D.mcnally-deterministic-cbor: dcbor-orig
   CTAP2:
     target: https://fidoalliance.org/specs/fido-v2.0-id-20180227/fido-client-to-authenticator-protocol-v2.0-id-20180227.html#ctap2-canonical-cbor-encoding-form
