@@ -2,7 +2,7 @@
 
 This is the working area for individual Internet-Drafts.
 
-## dCBOR – an Application Profile for Use with CBOR Deterministic Encoding
+## Common CBOR Deterministic Encoding and Application Profiles
 
 * [Editor's Copy](https://cabo.github.io/det/#go.draft-bormann-cbor-dcbor.html)
 * [Datatracker Page](https://datatracker.ietf.org/doc/draft-bormann-cbor-dcbor)

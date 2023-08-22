@@ -300,7 +300,7 @@ on/separate function to enable checking, whether that is efficiently
 implemented during decoding or less efficiently by comparing
 re-encoding.
 
-## Application Requirements and Tags
+## Application Requirements and Tags {#tags}
 
 The definition of Deterministic Encoding can become more complicated
 with the addition of Tags ({{Section 3.4 of STD94}}{{-tags}}).
