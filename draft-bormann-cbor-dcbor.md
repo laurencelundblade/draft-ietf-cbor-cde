@@ -91,6 +91,12 @@ informative:
     target: https://github.com/cabo/cbor-deterministic
   I-D.rundgren-deterministic-cbor: anders
   I-D.draft-mcnally-envelope-03: envelope-old
+  i128:
+    title: Primitive Type i128
+    target: https://doc.rust-lang.org/std/primitive.i128.html
+  u128:
+    title: Primitive Type u128
+    target: https://doc.rust-lang.org/std/primitive.u128.html
 
 --- abstract
 
@@ -352,7 +358,63 @@ A meaningful way to handle extensibility in this application profile
 would be to lift value range restrictions, keeping the
 profile-specific equivalence rules show here intact and possibly
 adding equivalences as needed for newly allowed values.
-This requires further discussion.
+
+This subsection presents two speculative extensions of dCBOR, called
+dCBOR-wide1 and dCBOR-wide2, to point out different objectives that
+can lead the development of an extension.
+
+### dCBOR-wide1 {#wide1}
+
+This speculative extension of dCBOR attempts to meet two objectives:
+
+{:group="w1"}
+1. All instances that meet dCBOR are also instances of dCBOR-wide1;
+   due to the nature of deterministic serialization this also means
+   that dCBOR-wide1 instances that only use application data model
+   values that are allowed by dCBOR are also dCBOR instances.
+2. The range of integers that can be provided by an application and
+   can be interchanged as exact numbers is
+   expanded to \[`-2`<sup>`127`</sup>, `2`<sup>`128`</sup>`-1`],
+   now also covering the types i128 and u128 in Rust {{i128}}{{u128}}.
+
+This extension is achieved by simply removing the integers in the
+extended range from the exclusion range of dCBOR.
+The numeric reduction rule is not changed, so it still applies only to
+integral-valued floating-point numbers in the range
+\[`-2`<sup>`63`</sup>, `2`<sup>`64`</sup>`-1`].
+
+Examples for the application-to-CDE mapping of dCBOR-wide1 are shown
+in {{tab-wide1}}.
+In the dCBOR column, items that are not excluded in dCBOR are marked
+✓, items that are excluded in dCBOR and therefore are new in
+dCBOR-wide1 are marked 👎.
+
+{::include tab-wide1}
+
+This speculative extended profile does not meet a potential objective
+number 3 that unextended dCBOR does meet:
+
+{:group="w1"}
+3. All integral-valued floating point numbers coming from an
+   application that fit into an integer representation allowed
+   by the application profile are represented as such.
+
+Objective 1 prevents numeric reduction from being applied to values
+that are not excluded in dCBOR but do to receive numeric reduction
+there.
+
+### dCBOR-wide2 {#wide2}
+
+The speculative dCBOR-wide2 extension of dCBOR attempts to meet
+objectives 2 and 3 mentioned in {{wide1}}.  It cannot meet objective 1:
+items in {{tab-wide2}} marked with a 💣 character are allows in dCBOR
+but have different serializations.
+
+{::include tab-wide2}
+
+This extension is achieved by removing the integers in the
+extended range from the exclusion range of dCBOR, and by adding the
+extended range to the target range of numeric reduction.
 
 # CDDL support
 
