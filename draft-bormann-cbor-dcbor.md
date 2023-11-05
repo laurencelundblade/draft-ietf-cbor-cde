@@ -129,26 +129,34 @@ informative:
 
 {::boilerplate bcp14-tagged}
 
-# Common CBOR Deterministic Encoding Profile {#dep}
+# Common CBOR Deterministic Encoding Profile (CDE) {#dep}
 
-{{Section 4.2.1 of -cbor}} defines _Core Deterministic Encoding
-Requirements_ for CBOR.
-It mandates to keep with what are only recommendations for Preferred
-Encoding for regular CBOR encoders.
-It adds mandates for definite-length encoding and for a
-map ordering based on lexicographic ordering of the
-(deterministically) encoded map keys.
+This specification defines the *Common CBOR Deterministic Encoding
+Profile* (CDE) based on the _Core Deterministic Encoding
+Requirements_ defined for CBOR in 
+{{Section 4.2.1 of -cbor}}.
+
+In many cases, CBOR provides more than one way to encode a data item,
+but also provides a recommendation for a *Preferred Encoding*.
+The *CoRE Deterministic Encoding Requirements* generally pick the
+preferred encodings as mandatory; they also pick additional choices
+such as definite-length encoding.
+Finally, it defines a map ordering based on lexicographic ordering of
+the (deterministically) encoded map keys.
 
 Note that this specific set of requirements is elective — in
 principle, other variants of deterministic encoding can be defined
 (and have been, now being phased out slowly, as detailed in {{Section 4.2.3
-of -cbor}}), or (as many applications of CBOR do today) deterministic
-encoding is not used at all.
+of -cbor}}).
+In many applications of CBOR today, deterministic encoding is not used
+at all, as its restriction of choices can create some additional
+performance cost and code complexity.
 
-The core requirements are designed, however, to provide
-well-understood and easy to implement rules while maximizing coverage,
-i.e., the subset of CBOR data items that are fully specified by these
-rules, and also placing minimal burden on implementations.
+The core requirements are designed to provide well-understood and
+easy-to-implement rules while maximizing coverage, i.e., the subset of
+CBOR data items that are fully specified by these rules, and also
+placing minimal burden on implementations.
+
 
 {{Section 4.2.2 of -cbor}} picks up on the interaction of extensibility
 (CBOR tags) and deterministic encoding.
@@ -161,12 +169,12 @@ lengths in the basic generic data model, i.e., by mandating the
 Preferred Encoding ({{Section 3.4.3 of -cbor}}).
 
 {: group="1"}
-1. The Common CBOR Deterministic Encoding Profile turns this
+1. The Common CBOR Deterministic Encoding Profile (CDE) turns this
    recommendation into a mandate: Integers that can be represented by
    basic major type 0 and 1 are encoded using the deterministic
    encoding defined for them, and integers outside this range are
    encoded using the preferred serialization ({{Section 3.4.3 of
-   -cbor}}) of tag 2 and 3 (i.e., no leading zeros).
+   -cbor}}) of tag 2 and 3 (i.e., no leading zero bytes).
 
 Most tags capture more specific application semantics and therefore
 may be harder to define a deterministic encoding for.
@@ -175,7 +183,7 @@ covered by the _Core Deterministic Encoding Requirements_, the mapping
 of diverging platform application data types on the tag contents may
 be hard to do in a deterministic way; see {{Section 3.2 of -det}} for
 more explanation as well as examples.
-As the Common CBOR Deterministic Encoding Profile would continually
+As the CDE would continually
 need to address additional issues raised by the registration of new
 tags, this specification RECOMMENDS that new tag registrations address
 deterministic encoding in the context of this Profile.
@@ -185,8 +193,8 @@ floating point numbers, partially because they themselves are often
 obtained from processes that are not entirely deterministic between platforms.
 See {{Section 3.2.2 of -det}} for more details.
 {{Section 4.2.2 of -cbor}} presents a number of choices, which need to
-be made to obtain a Common CBOR Deterministic Encoding Profile.
-Specifically (in the order of the bullet list at the end of {{Section
+be made to obtain a Common CBOR Deterministic Encoding Profile (CDE).
+Specifically, CDE specifies (in the order of the bullet list at the end of {{Section
 4.2.2 of -cbor}}):
 
 {: group="1"}
@@ -216,15 +224,24 @@ that, see {{dcbor-num}}.
 
 While {{-anders}} is a relatively terse document that is not always easy
 to interpret, to this author its intent appears to be aligned with
-that of the Common CBOR Deterministic Encoding Profile defined here.
+that of the Common CBOR Deterministic Encoding Profile defined here,
+except that it mandates reduction of all NaN values to the one encoded
+as 0xf97e00.
 
 # Application Profiles
+
+While the Common CBOR Deterministic Encoding Profile (CDE) provides
+for commonality between different applications of CBOR, it is useful
+to further constrain the set of data items handled in a group of
+applications (_exclusions_) and to define further mappings
+(_reductions_) that help the applications in such a group get by with
+the exclusions.
 
 The dCBOR Application Profile specifies the use of Deterministic
 Encoding as defined in {{Section 4.2 of STD94}} (see also {{-det}} for more
 information) together with some application-level rules.
-As an example, the rules for Gordian dCBOR {{-dcbor-orig}} are specified
-in this section.
+To provide an example, but also to provide a normative definition, the
+rules for Gordian dCBOR {{-dcbor-orig}} are specified in this section.
 
 The application-level rules specified by an Application Profile are
 based on the same Common CBOR Deterministic Encoding Profile; they do
@@ -248,8 +265,8 @@ An Application Profile is intended to be used in conjunction with an
 application, which typically will use a subset of the CBOR generic
 data model, which in turn
 influences which subset of the application profile is used.
-As a result, an Application Profile places no direct requirement on what
-subset of CBOR is implemented.
+As a result, an Application Profile itself places no direct
+requirement on what minimum subset of CBOR is implemented.
 For instance, while the dCBOR application profile defines rules for
 the processing of floating point values, there is no requirement that
 dCBOR implementations support floating point numbers (or any other
@@ -293,8 +310,9 @@ values, but 2<sup>64</sup> unsigned (non-negative) values, creating an
 
 This maps to a choice between a platform 64-bit two's complement
 signed integer (often called int64) and a 64-bit unsigned integer (uint64).
-(Specific applications will, of course, further restrict valid ranges of
-integers, based on their position and semantics in the CBOR data item.)
+(Specific applications will, of course, further restrict ranges of
+integers that are considered valid for the application, based on their
+position and semantics in the CBOR data item.)
 
 ### Numeric Reduction of Floating-Point Values {#dcbor-num}
 
@@ -356,7 +374,7 @@ Considerations) of {{-det}} being set by default.
 {{-dcbor-orig}} does not discuss extensibility.
 A meaningful way to handle extensibility in this application profile
 would be to lift value range restrictions, keeping the
-profile-specific equivalence rules show here intact and possibly
+profile-specific equivalence rules shown here intact and possibly
 adding equivalences as needed for newly allowed values.
 
 This subsection presents two speculative extensions of dCBOR, called
@@ -544,10 +562,10 @@ This document requests IANA to register the contents of
 "{{cddl-control-operators (CDDL Control Operators)<IANA.cddl}}" of {{IANA.cddl}}:
 
 | Name      | Reference |
-| .cde      | [RFCXXXX] |
-| .cdeseq   | [RFCXXXX] |
-| .dcbor    | [RFCXXXX] |
-| .dcborseq | [RFCXXXX] |
+| .cde      | \[RFCXXXX] |
+| .cdeseq   | \[RFCXXXX] |
+| .dcbor    | \[RFCXXXX] |
+| .dcborseq | \[RFCXXXX] |
 {: #tbl-iana-reqs title="New control operators to be registered"}
 
 
