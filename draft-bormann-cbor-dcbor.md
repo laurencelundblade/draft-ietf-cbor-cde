@@ -50,7 +50,6 @@ informative:
   I-D.bormann-cbor-det:
     -: det
   I-D.bormann-cbor-cde:
-    title: CDE
     -: cde
   I-D.mcnally-deterministic-cbor: dcbor-orig
   bc-dcbor-ts:
