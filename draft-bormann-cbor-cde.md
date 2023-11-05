@@ -53,38 +53,6 @@ informative:
   I-D.bormann-cbor-dcbor:
     -: dcbor
   I-D.mcnally-deterministic-cbor: dcbor-orig
-  bc-dcbor-ts:
-    title: "Blockchain Commons Deterministic CBOR (\"dCBOR\") for TypeScript"
-    target: https://github.com/BlockchainCommons/bc-dcbor-ts
-  BCSwiftDCBOR:
-    title: "Blockchain Commons Deterministic CBOR (\"dCBOR\") for Swift"
-    target: https://github.com/BlockchainCommons/BCSwiftDCBOR
-  bc-dcbor-rust:
-    title: "Blockchain Commons Deterministic CBOR (\"dCBOR\") for Rust"
-    target: https://github.com/BlockchainCommons/bc-dcbor-rust
-  cbor-dcbor:
-    author:
-      name: Carsten Bormann
-    title: PoC of the McNally/Allen "dCBOR" application-level CBOR representation rules
-    target: https://github.com/cabo/cbor-dcbor
-  cbor-diag:
-    author:
-      name: Carsten Bormann
-    title: CBOR diagnostic utilities
-    target: https://github.com/cabo/cbor-diag
-  cbor-deterministic:
-    author:
-      name: Carsten Bormann
-    title: cbor-deterministic gem
-    target: https://github.com/cabo/cbor-deterministic
-  I-D.rundgren-deterministic-cbor: anders
-  I-D.draft-mcnally-envelope-03: envelope-old
-  i128:
-    title: Primitive Type i128
-    target: https://doc.rust-lang.org/std/primitive.i128.html
-  u128:
-    title: Primitive Type u128
-    target: https://doc.rust-lang.org/std/primitive.u128.html
 
 --- abstract
 
