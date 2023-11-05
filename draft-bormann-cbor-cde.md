@@ -69,7 +69,7 @@ informative:
     requirements.
 
     This document also introduces the concept of Application Profiles,
-    which arelayered on top of the CBOR CDE Profile and can address
+    which are layered on top of the CBOR CDE Profile and can address
     more application specific requirements.
     To demonstrate how Application Profiles can be built on the CDE,
     a companion document defines the application profile "dCBOR".
@@ -116,7 +116,7 @@ placing minimal burden on implementations.
 {{Section 4.2.2 of -cbor}} picks up on the interaction of extensibility
 (CBOR tags) and deterministic encoding.
 CBOR itself uses some tags to increase the range of its basic
-generic data types, e.g., tag 2/3 extend the range of basic major
+generic data types, e.g., tags 2/3 extend the range of basic major
 types 0/1 in a seamless way.
 {{Section 4.2.2 of -cbor}} recommends handling this transition the same
 way as with the transition between different integer representation
@@ -258,7 +258,7 @@ More importantly, if the encoded data item also needs to have a
 specific structure, this can be expressed by the right hand side
 (instead of using the most general CDDL type `any` here).
 
-(Note that the ...`seq` control operators do not enable specifying
+(Note that the ...`seq` control operator does not enable specifying
 different deterministic encoding requirements for the elements of the
 sequence.  If a use case for such a feature becomes known, it could be
 added.)
@@ -298,8 +298,9 @@ This document requests IANA to register the contents of
 {:numbered="false"}
 
 An earlier version of this document was based on the work of Wolf
-McNally and Christopher Allen as documented in {{-dcbor-orig}}; this is
-now separated out as the {{-dcbor}} Application Profile.
+McNally and Christopher Allen as documented in {{-dcbor-orig}}; the
+parts directly based on this are
+now separated out as the dCBOR Application Profile {{-dcbor}}.
 Nonetheless, we acknowledge that this work has contributed greatly to
 shaping the concept of a CBOR Common Deterministic Encoding and
 Application Profiles on top of that.
