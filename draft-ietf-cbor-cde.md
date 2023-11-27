@@ -3,7 +3,7 @@ v: 3
 
 title: CBOR Common Deterministic Encoding (CDE)
 abbrev: CBOR CDE
-docname: draft-bormann-cbor-cde-latest
+docname: draft-ietf-cbor-cde-latest
 category: bcp
 stream: IETF
 
