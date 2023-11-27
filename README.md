@@ -2,7 +2,7 @@
 
 This is the working area for individual Internet-Drafts.
 
-## Common CBOR Deterministic Encoding and Application Profiles
+## The CDE-based Application Profile dCBOR
 
 * [Editor's Copy](https://cabo.github.io/det/#go.draft-bormann-cbor-dcbor.html)
 * [Datatracker Page](https://datatracker.ietf.org/doc/draft-bormann-cbor-dcbor)
@@ -15,6 +15,13 @@ This is the working area for individual Internet-Drafts.
 * [Datatracker Page](https://datatracker.ietf.org/doc/draft-bormann-cbor-det)
 * [Individual Draft](https://datatracker.ietf.org/doc/html/draft-bormann-cbor-det)
 * [Compare Editor's Copy to Individual Draft](https://cabo.github.io/det/#go.draft-bormann-cbor-det.diff)
+
+## CBOR Common Deterministic Encoding (CDE)
+
+* [Editor's Copy](https://cabo.github.io/det/#go.draft-ietf-cbor-cde.html)
+* [Datatracker Page](https://datatracker.ietf.org/doc/draft-ietf-cbor-cde)
+* [Individual Draft](https://datatracker.ietf.org/doc/html/draft-ietf-cbor-cde)
+* [Compare Editor's Copy to Individual Draft](https://cabo.github.io/det/#go.draft-ietf-cbor-cde.diff)
 
 
 ## Contributing
