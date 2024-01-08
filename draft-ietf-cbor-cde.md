@@ -202,7 +202,7 @@ See {{-dcbor-orig}} for a definition of the dCBOR Application Profile that
 makes use of CDE.
 
 In general, the application-level rules specified by an Application Profile are
-based on the common CBOR Common Deterministic Encoding Profile; they do
+based on the shared CBOR Common Deterministic Encoding Profile; they do
 not "fork" CBOR in the sense of requiring distinct generic
 encoder/decoder implementations.
 
@@ -217,7 +217,8 @@ from an application.
 
 Please note that the separation between standard CBOR processing and
 the processing required by the Application Profile is a conceptual
-one: Both Application Profile processing and standard CBOR processing
+one: Instead of employing generic encoders/decoders, both Application
+Profile processing and standard CBOR processing
 can be combined into a encoder/decoder specifically designed for the
 Application Profile.
 
@@ -261,7 +262,7 @@ More importantly, if the encoded data item also needs to have a
 specific structure, this can be expressed by the right hand side
 (instead of using the most general CDDL type `any` here).
 
-(Note that the ...`seq` control operator does not enable specifying
+(Note that the `.cborseq` control operator does not enable specifying
 different deterministic encoding requirements for the elements of the
 sequence.  If a use case for such a feature becomes known, it could be
 added.)
