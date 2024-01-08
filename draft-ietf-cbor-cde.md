@@ -31,9 +31,8 @@ author:
     email: cabo@tzi.org
 
 normative:
-  STD94:
-    -: cbor
-    =: RFC8949
+  STD94: cbor
+#    =: RFC8949
   IEEE754:
     target: https://ieeexplore.ieee.org/document/8766229
     title: IEEE Standard for Floating-Point Arithmetic
@@ -86,7 +85,7 @@ informative:
 This specification defines the *CBOR Common Deterministic Encoding
 Profile* (CDE) based on the _Core Deterministic Encoding
 Requirements_ defined for CBOR in
-{{Section 4.2.1 of -cbor}}.
+{{Section 4.2.1 of RFC8949@-cbor}}.
 
 In many cases, CBOR provides more than one way to encode a data item,
 but also provides a recommendation for a *Preferred Encoding*.
@@ -99,7 +98,7 @@ the (deterministically) encoded map keys.
 Note that this specific set of requirements is elective — in
 principle, other variants of deterministic encoding can be defined
 (and have been, now being phased out slowly, as detailed in {{Section 4.2.3
-of -cbor}}).
+of RFC8949@-cbor}}).
 In many applications of CBOR today, deterministic encoding is not used
 at all, as its restriction of choices can create some additional
 performance cost and code complexity.
@@ -109,15 +108,15 @@ easy-to-implement rules while maximizing coverage, i.e., the subset of
 CBOR data items that are fully specified by these rules, and also
 placing minimal burden on implementations.
 
-{{Section 4.2.2 of -cbor}} picks up on the interaction of extensibility
+{{Section 4.2.2 of RFC8949@-cbor}} picks up on the interaction of extensibility
 (CBOR tags) and deterministic encoding.
 CBOR itself uses some tags to increase the range of its basic
 generic data types, e.g., tags 2/3 extend the range of basic major
 types 0/1 in a seamless way.
-{{Section 4.2.2 of -cbor}} recommends handling this transition the same
+{{Section 4.2.2 of RFC8949@-cbor}} recommends handling this transition the same
 way as with the transition between different integer representation
 lengths in the basic generic data model, i.e., by mandating the
-Preferred Encoding ({{Section 3.4.3 of -cbor}}).
+Preferred Encoding ({{Section 3.4.3 of RFC8949@-cbor}}).
 
 {: group="1"}
 1. The CBOR Common Deterministic Encoding Profile (CDE) turns this
@@ -125,7 +124,7 @@ Preferred Encoding ({{Section 3.4.3 of -cbor}}).
    basic major type 0 and 1 are encoded using the deterministic
    encoding defined for them, and integers outside this range are
    encoded using the preferred serialization ({{Section 3.4.3 of
-   -cbor}}) of tag 2 and 3 (i.e., no leading zero bytes).
+   RFC8949@-cbor}}) of tag 2 and 3 (i.e., no leading zero bytes).
 
 Most tags capture more specific application semantics and therefore
 may be harder to define a deterministic encoding for.
@@ -143,10 +142,10 @@ A particularly difficult field to obtain deterministic encoding for is
 floating point numbers, partially because they themselves are often
 obtained from processes that are not entirely deterministic between platforms.
 See {{Section 3.2.2 of -det}} for more details.
-{{Section 4.2.2 of -cbor}} presents a number of choices, which need to
+{{Section 4.2.2 of RFC8949@-cbor}} presents a number of choices, which need to
 be made to obtain a CBOR Common Deterministic Encoding Profile (CDE).
 Specifically, CDE specifies (in the order of the bullet list at the end of {{Section
-4.2.2 of -cbor}}):
+4.2.2 of RFC8949@-cbor}}):
 
 {: group="1"}
 2. Besides the mandated use of preferred encoding, there is no further
@@ -189,10 +188,11 @@ applications (_exclusions_) and to define further mappings
 (_reductions_) that help the applications in such a group get by with
 the exclusions.
 
-The dCBOR Application Profile {{-dcbor-orig}}, for example, uses CDE to
-specify the use of Deterministic Encoding as defined in {{Section 4.2
-of RFC8949@-cbor}} (see also {{-det}} for more information) together with
-some application-level rules.
+For example, the dCBOR Application Profile specifies the use of
+Deterministic Encoding as defined in {{Section 4.2 of RFC8949@-cbor}} (see also
+{{-det}} for more information) together with some application-level rules.
+See {{-dcbor-orig}} for a definition of the dCBOR Application Profile that
+makes use of CDE.
 
 In general, the application-level rules specified by an Application Profile are
 based on the common CBOR Common Deterministic Encoding Profile; they do
