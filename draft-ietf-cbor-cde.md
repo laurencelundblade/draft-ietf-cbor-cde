@@ -275,9 +275,13 @@ and are encouraged to do so.
 
 # Security Considerations
 
-TODO Security
-
-
+The security considerations in {{Section 10 of RFC8949@-cbor}} apply.
+The use of deterministic encoding can mitigate issues arising out of
+the use of non-preferred encodings specially crafted by an attacker.
+However, this effect only accrues if the decoder actually checks that
+deterministic encoding was applied correctly.
+More generally, additional security properties of deterministic
+encoding can rely on this check being performed properly.
 
 # IANA Considerations
 
