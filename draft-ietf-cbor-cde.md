@@ -48,10 +48,7 @@ normative:
 
 
 informative:
-  I-D.bormann-cbor-det:
-    -: det
-  I-D.bormann-cbor-dcbor:
-    -: dcbor
+  I-D.bormann-cbor-det: det
   I-D.mcnally-deterministic-cbor: dcbor-orig
 
 --- abstract
@@ -71,15 +68,14 @@ informative:
     This document also introduces the concept of Application Profiles,
     which are layered on top of the CBOR CDE Profile and can address
     more application specific requirements.
-    To demonstrate how Application Profiles can be built on the CDE,
-    a companion document defines the application profile "dCBOR".
+    Application Profiles are defined in separate documents.
 
 --- middle
 
 # Introduction
 
 [^abs1-]
-
+{{-dcbor-orig}} is an example for such a document.
 
 ## Conventions and Definitions
 
@@ -193,15 +189,15 @@ applications (_exclusions_) and to define further mappings
 (_reductions_) that help the applications in such a group get by with
 the exclusions.
 
-For example, the dCBOR Application Profile specifies the use of
-Deterministic Encoding as defined in {{Section 4.2 of STD94}} (see also
-{{-det}} for more information) together with some application-level rules.
-See {{-dcbor}} for a definition of the dCBOR Application Profile that
-makes use of CDE.
+The dCBOR Application Profile {{-dcbor-orig}}, for example, uses CDE to
+specify the use of Deterministic Encoding as defined in {{Section 4.2
+of RFC8949@-cbor}} (see also {{-det}} for more information) together with
+some application-level rules.
 
 In general, the application-level rules specified by an Application Profile are
-based on the same CBOR Common Deterministic Encoding Profile; they do
-not "fork" CBOR.
+based on the common CBOR Common Deterministic Encoding Profile; they do
+not "fork" CBOR in the sense of requiring distinct generic
+encoder/decoder implementations.
 
 An Application Profile implementation produces well-formed,
 deterministically encoded CBOR according to {{STD94}}, and existing
@@ -298,9 +294,9 @@ This document requests IANA to register the contents of
 {:numbered="false"}
 
 An earlier version of this document was based on the work of Wolf
-McNally and Christopher Allen as documented in {{-dcbor-orig}}; the
-parts directly based on this are
-now separated out as the dCBOR Application Profile {{-dcbor}}.
-Nonetheless, we acknowledge that this work has contributed greatly to
-shaping the concept of a CBOR Common Deterministic Encoding and
-Application Profiles on top of that.
+McNally and Christopher Allen as documented in {{-dcbor-orig}}; more
+recent revisions of that document now make use of the present document
+and the concept of Application Profile.
+We would like to explicitly acknowledge that this work has
+contributed greatly to shaping the concept of a CBOR Common
+Deterministic Encoding and Application Profiles on top of that.
