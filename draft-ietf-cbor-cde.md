@@ -135,7 +135,7 @@ be hard to do in a deterministic way; see {{Section 3.2 of -det}} for
 more explanation as well as examples.
 As the CDE would continually
 need to address additional issues raised by the registration of new
-tags, this specification RECOMMENDS that new tag registrations address
+tags, this specification recommends that new tag registrations address
 deterministic encoding in the context of this Profile.
 
 A particularly difficult field to obtain deterministic encoding for is
