@@ -160,13 +160,20 @@ Specifically, CDE specifies (in the order of the bullet list at the end of {{Sec
 4. There is no special handling of NaN values, except that the
    preferred encoding rules also apply to NaNs with payloads, using
    the canonical encoding of NaNs as defined in {{IEEE754}}.
+   Specifically, this means that shorter forms of encodings for a NaN
+   are used when that can be achieved by only removing trailing zeros
+   in the payload.
+   Further clarifying {{IEEE754}}, the CBOR encoding uses a leading bit
+   of 1 to encode a quiet NaN; encoding of signaling NaN is NOT
+   RECOMMENDED but is achieved by using a leading bit of 0.
+
    Typically, most applications that employ NaNs in their storage and
    communication interfaces will only use the NaN with payload 0,
-   which encodes as 0xf97e00.
+   which therefore deterministically encodes as 0xf97e00.
 5. There is no special handling of subnormal values.
 6. The CBOR Common Deterministic Encoding Profile does not presume
-   equivalence of floating point values with other representation
-   (e.g., tag 4/5) with basic floating point values.
+   equivalence of basic floating point values with floating point
+   values using other representations (e.g., tag 4/5).
 
 The main intent here is to preserve the basic generic data model, so
 Application Profiles can make their own decisions within that data model.
