@@ -13,11 +13,9 @@
 
 ### The CDE-based Application Profile dCBOR
 
-* [Editor's Copy](https://cabo.github.io/det/#go.draft-bormann-cbor-dcbor.html)
-* [Datatracker Page](https://datatracker.ietf.org/doc/draft-bormann-cbor-dcbor)
-* [Individual Draft](https://datatracker.ietf.org/doc/html/draft-bormann-cbor-dcbor)
-* [Compare Editor's Copy to Individual Draft](https://cabo.github.io/det/#go.draft-bormann-cbor-dcbor.diff)
-
+This draft has been replaced by
+[draft-mcnally-deterministic-cbor](https://datatracker.ietf.org/doc/draft-mcnally-deterministic-cbor),
+with [github repo here](https://github.com/BlockchainCommons/WIPs-IETF-draft-deterministic-cbor).
 
 ### CBOR: On Deterministic Encoding (Explainer)
 
