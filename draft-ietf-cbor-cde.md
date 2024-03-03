@@ -333,19 +333,19 @@ Notes:
   achieving this level of robustness is a mark of quality of
   implementation.
 
-* Preferred Serialization and CDE only affect serialization.
+* Preferred serialization and CDE only affect serialization.
   They do not place any requirements, exclusions, mappings or such on
   the data model layer.
   Application profiles such as dCBOR are different as they can affect
   the data model by restricting some values and ranges.
 
-* CBOR decoders in general are not required to check for Preferred
-  Serialization or CDE and reject inputs that do not do not fulfill
+* CBOR decoders in general are not required to check for preferred
+  serialization or CDE and reject inputs that do not do not fulfill
   their requirements..
   However, in an environment that employs deterministic encoding, this
   negates many of its benefits.
-  Decoder implementations that advertise "support" for Preferred
-  Serialization or CDE need to check the encoding and reject
+  Decoder implementations that advertise "support" for preferred
+  serialization or CDE need to check the encoding and reject
   input that is not encoded to the encoding specification in use.
   Again, application profiles such as dCBOR may pose additional
   requirements, such as requiring rejection of non-conforming inputs.
@@ -361,7 +361,7 @@ In the following, the abbreviation "ai" will be used for the 5-bit
 additional information field in the first byte of an encoded CBOR data
 item, which follows the 3-bit field for the major type.
 
-### Preferred serialization encoders
+### Preferred Serialization Encoders {#pse}
 
 1. Shortest-form encoding of the argument MUST be used for all major
    types.
@@ -413,7 +413,7 @@ item, which follows the 3-bit field for the major type.
      (This will always reduce a double or single quiet NaN with a zero
      NaN payload to a half-precision quiet NaN.)
 
-### Preferred serialization decoders
+### Preferred Serialization Decoders {#psd}
 
 1. Decoders MUST accept shortest-form encoded arguments.
 
@@ -438,17 +438,18 @@ item, which follows the 3-bit field for the major type.
 
 ### CDE Encoders
 
-1. CDE encoders MUST only emit CBOR fulfilling the Preferred
-   Serialization rules described above.
+1. CDE encoders MUST only emit CBOR fulfilling the preferred
+   serialization rules ({{pse}}).
 
 1. CDE encoders MUST sort maps by the CBOR representation of the map
    key.
    The sorting is byte-wise lexicographic order of the encoded map
-   keys.
+   key data items.
 
 ### CDE Decoders
 
-1. CDE decoders MUST follow the rules for Preferred Serialization Decoders.
+1. CDE decoders MUST follow the rules for preferred serialization
+   decoders ({{psd}}).
 
 # Acknowledgments
 {:numbered="false"}
