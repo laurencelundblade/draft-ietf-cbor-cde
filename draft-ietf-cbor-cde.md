@@ -324,8 +324,8 @@ Notes:
   The purpose of the restatement is to aid the work of implementers,
   not to redefine anything.
 
-* Duplicate map keys are never valid in CBOR at all (see, for
-  instance, list item "Major type 5" in {{Section 3.1 of RFC8949@-cbor}})
+* Duplicate map keys are never valid in CBOR at all (see
+  list item "Major type 5" in {{Section 3.1 of RFC8949@-cbor}})
   no matter what sort of serialization is used.
   Of the various strategies listed in {{Section 5.6 of RFC8949@-cbor}},
   detecting duplicates and handling them as an error instead of
