@@ -121,7 +121,7 @@ types 0/1 in a seamless way.
 {{Section 4.2.2 of RFC8949@-cbor}} recommends handling this transition the same
 way as with the transition between different integer representation
 lengths in the basic generic data model, i.e., by mandating the
-Preferred Serialization ({{Section 3.4.3 of RFC8949@-cbor}}).
+preferred serialization for all integers ({{Section 3.4.3 of RFC8949@-cbor}}).
 
 {: group="1"}
 1. The CBOR Common Deterministic Encoding Profile (CDE) turns this
