@@ -93,9 +93,9 @@ Requirements_ defined for CBOR in
 {{Section 4.2.1 of RFC8949@-cbor}}.
 
 In many cases, CBOR provides more than one way to encode a data item,
-but also provides a recommendation for a *Preferred Encoding*.
+but also provides a recommendation for a *Preferred Serialization*.
 The *CoRE Deterministic Encoding Requirements* generally pick the
-preferred encodings as mandatory; they also pick additional choices
+preferred serializations as mandatory; they also pick additional choices
 such as definite-length encoding.
 Finally, it defines a map ordering based on lexicographic ordering of
 the (deterministically) encoded map keys.
@@ -121,7 +121,7 @@ types 0/1 in a seamless way.
 {{Section 4.2.2 of RFC8949@-cbor}} recommends handling this transition the same
 way as with the transition between different integer representation
 lengths in the basic generic data model, i.e., by mandating the
-Preferred Encoding ({{Section 3.4.3 of RFC8949@-cbor}}).
+preferred serialization for all integers ({{Section 3.4.3 of RFC8949@-cbor}}).
 
 {: group="1"}
 1. The CBOR Common Deterministic Encoding Profile (CDE) turns this
@@ -153,7 +153,7 @@ Specifically, CDE specifies (in the order of the bullet list at the end of {{Sec
 4.2.2 of RFC8949@-cbor}}):
 
 {: group="1"}
-2. Besides the mandated use of preferred encoding, there is no further
+2. Besides the mandated use of preferred serialization, there is no further
    specific action for the two different zero values, e.g., an encoder
    that is asked by an application to represent a negative floating
    point zero will generate 0xf98000.
@@ -163,7 +163,7 @@ Specifically, CDE specifies (in the order of the bullet list at the end of {{Sec
    independent of whether the floating point value is, mathematically,
    an integral value (choice 2 of the second bullet).
 4. There is no special handling of NaN values, except that the
-   preferred encoding rules also apply to NaNs with payloads, using
+   preferred serialization rules also apply to NaNs with payloads, using
    the canonical encoding of NaNs as defined in {{IEEE754}}.
    Specifically, this means that shorter forms of encodings for a NaN
    are used when that can be achieved by only removing trailing zeros
@@ -282,7 +282,7 @@ and are encouraged to do so.
 
 The security considerations in {{Section 10 of RFC8949@-cbor}} apply.
 The use of deterministic encoding can mitigate issues arising out of
-the use of non-preferred encodings specially crafted by an attacker.
+the use of non-preferred serializations specially crafted by an attacker.
 However, this effect only accrues if the decoder actually checks that
 deterministic encoding was applied correctly.
 More generally, additional security properties of deterministic
@@ -333,19 +333,19 @@ Notes:
   achieving this level of robustness is a mark of quality of
   implementation.
 
-* Preferred Serialization and CDE only affect serialization.
+* Preferred serialization and CDE only affect serialization.
   They do not place any requirements, exclusions, mappings or such on
   the data model layer.
   Application profiles such as dCBOR are different as they can affect
   the data model by restricting some values and ranges.
 
-* CBOR decoders in general are not required to check for Preferred
-  Serialization or CDE and reject inputs that do not do not fulfill
+* CBOR decoders in general are not required to check for preferred
+  serialization or CDE and reject inputs that do not do not fulfill
   their requirements..
   However, in an environment that employs deterministic encoding, this
   negates many of its benefits.
-  Decoder implementations that advertise "support" for Preferred
-  Serialization or CDE need to check the encoding and reject
+  Decoder implementations that advertise "support" for preferred
+  serialization or CDE need to check the encoding and reject
   input that is not encoded to the encoding specification in use.
   Again, application profiles such as dCBOR may pose additional
   requirements, such as requiring rejection of non-conforming inputs.
@@ -361,7 +361,7 @@ In the following, the abbreviation "ai" will be used for the 5-bit
 additional information field in the first byte of an encoded CBOR data
 item, which follows the 3-bit field for the major type.
 
-### Preferred serialization encoders
+### Preferred Serialization Encoders {#pse}
 
 1. Shortest-form encoding of the argument MUST be used for all major
    types.
@@ -413,7 +413,7 @@ item, which follows the 3-bit field for the major type.
      (This will always reduce a double or single quiet NaN with a zero
      NaN payload to a half-precision quiet NaN.)
 
-### Preferred serialization decoders
+### Preferred Serialization Decoders {#psd}
 
 1. Decoders MUST accept shortest-form encoded arguments.
 
@@ -438,17 +438,18 @@ item, which follows the 3-bit field for the major type.
 
 ### CDE Encoders
 
-1. CDE encoders MUST only emit CBOR fulfilling the Preferred
-   Serialization rules described above.
+1. CDE encoders MUST only emit CBOR fulfilling the preferred
+   serialization rules ({{pse}}).
 
 1. CDE encoders MUST sort maps by the CBOR representation of the map
    key.
    The sorting is byte-wise lexicographic order of the encoded map
-   keys.
+   key data items.
 
 ### CDE Decoders
 
-1. CDE decoders MUST follow the rules for Preferred Serialization Decoders.
+1. CDE decoders MUST follow the rules for preferred serialization
+   decoders ({{psd}}).
 
 # Acknowledgments
 {:numbered="false"}
