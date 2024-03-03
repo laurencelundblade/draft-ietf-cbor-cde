@@ -335,7 +335,7 @@ Notes:
 
 * Preferred serialization and CDE only affect serialization.
   They do not place any requirements, exclusions, mappings or such on
-  the data model layer.
+  the data model level.
   Application profiles such as dCBOR are different as they can affect
   the data model by restricting some values and ranges.
 
