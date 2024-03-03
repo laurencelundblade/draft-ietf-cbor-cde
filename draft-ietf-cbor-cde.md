@@ -29,6 +29,11 @@ author:
     country: Germany
     phone: +49-421-218-63921
     email: cabo@tzi.org
+contributor:
+- name: Laurence Lundblade
+  org: Security Theory LLC
+  email: lgl@securitytheory.com
+  contribution: Laurence provided the text that became {{impcheck}}.
 
 normative:
   STD94: cbor
@@ -301,6 +306,149 @@ This document requests IANA to register the contents of
 
 
 --- back
+
+# Implementers' Checklists {#impcheck}
+
+This appendix is informative.
+It provides brief checklists that implementers can use to check their
+implementations.
+It uses {{RFC2119}} language, specifically the keyword MUST, to highlight
+the specific items that implementers may want to check.
+It does not contain any normative mandates.
+This appendix is informative.
+
+Notes:
+
+* This is largely a restatement of parts of {{Section 4 of
+  RFC8949@-cbor}}.
+  The purpose of the restatement is to aid the work of implementers,
+  not to redefine anything.
+
+* Duplicate map keys are never valid in CBOR at all (see
+  list item "Major type 5" in {{Section 3.1 of RFC8949@-cbor}})
+  no matter what sort of serialization is used.
+  Of the various strategies listed in {{Section 5.6 of RFC8949@-cbor}},
+  detecting duplicates and handling them as an error instead of
+  passing invalid data to the application is the most robust one;
+  achieving this level of robustness is a mark of quality of
+  implementation.
+
+* Preferred Serialization and CDE only affect serialization.
+  They do not place any requirements, exclusions, mappings or such on
+  the data model layer.
+  Application profiles such as dCBOR are different as they can affect
+  the data model by restricting some values and ranges.
+
+* CBOR decoders in general are not required to check for Preferred
+  Serialization or CDE and reject inputs that do not do not fulfill
+  their requirements..
+  However, in an environment that employs deterministic encoding, this
+  negates many of its benefits.
+  Decoder implementations that advertise "support" for Preferred
+  Serialization or CDE need to check the encoding and reject
+  input that is not encoded to the encoding specification in use.
+  Again, application profiles such as dCBOR may pose additional
+  requirements, such as requiring rejection of non-conforming inputs.
+
+  If a generic decoder needs to be used that does not "support" CDE, a
+  simple (but somewhat clumsy) way to check for proper CDE encoding is
+  to re-encode the decoded data and check for bit-to-bit equality with
+  the original input.
+
+## Preferred Serialization
+
+In the following, the abbreviation "ai" will be used for the 5-bit
+additional information field in the first byte of an encoded CBOR data
+item, which follows the 3-bit field for the major type.
+
+### Preferred serialization encoders
+
+1. Shortest-form encoding of the argument MUST be used for all major
+   types.
+   Major type 7 is used for floating-point and simple values; floating
+   point values have its specific rules for how the shortest form is
+   derived for the argument.
+   The shortest form encoding for any argument that is not a floating
+   point value is:
+
+   * 0 to 23 and -1 to -24 MUST be encoded in the same byte as the
+     major type.
+   * 24 to 255 and -25 to -256 MUST be encoded only with an additional
+     byte (ai = 0x18).
+   * 256 to 65535 and -257 to -65536 MUST be encoded only with an
+     additional two bytes (ai = 0x19).
+   * 65536 to 4294967295 and -65537 to -4294967296 MUST be encoded
+     only with an additional four bytes (ai = 0x1a).
+
+1. If maps or arrays are emitted, they MUST use definite-length
+   encoding (never indefinite-length).
+
+1. If text or byte strings are emitted, they MUST use definite-length
+   encoding (never indefinite-length).
+
+1. If floating-point numbers are emitted, the following apply:
+
+   * The length of the argument indicates half (binary16, ai = 0x19),
+     single (binary32, ai = 0x1a) and double (binary64, ai = 0x1b)
+     precision encoding.
+     If multiple of these encodings preserve the precision of the
+     value to be encoded, only the shortest form of these MUST be
+     emitted.
+     That is, encoders MUST support half-precision and
+     single-precision floating point.
+     Positive and negative infinity and zero MUST be represented in
+     half-precision floating point.
+
+   * NaNs, and thus NaN payloads MUST be supported.
+
+     As with all floating point numbers, NaNs with payloads MUST be
+     reduced to the shortest of double, single or half precision that
+     preserves the NaN payload.
+     The reduction is performed by removing the rightmost N bits of the
+     payload, where N is the difference in the number of bits in the
+     significand (mantissa) between the original format and the
+     reduced format.
+     The reduction is performed only (preserves the value only) if all the
+     rightmost bits removed are zero.
+     (This will always reduce a double or single quiet NaN with a zero
+     NaN payload to a half-precision quiet NaN.)
+
+### Preferred serialization decoders
+
+1. Decoders MUST accept shortest-form encoded arguments.
+
+1. If arrays or maps are supported, definite-length arrays or maps MUST be accepted.
+
+1. If text or byte strings are supported, definite-length text or byte
+   strings MUST be accepted.
+
+1. If floating-point numbers are supported, the following apply:
+
+   * Half-precision values MUST be accepted.
+   * Double- and single-precision values SHOULD be accepted; leaving these out
+     is only foreseen for decoders that need to work in exceptionally
+     constrained environments.
+   * If double-precision values are accepted, single-precision values
+     MUST be accepted.
+
+   * NaNs, and thus NaN payloads, MUST be accepted.
+
+
+## CDE
+
+### CDE Encoders
+
+1. CDE encoders MUST only emit CBOR fulfilling the Preferred
+   Serialization rules described above.
+
+1. CDE encoders MUST sort maps by the CBOR representation of the map
+   key.
+   The sorting is byte-wise lexicographic order of the encoded map
+   keys.
+
+### CDE Decoders
+
+1. CDE decoders MUST follow the rules for Preferred Serialization Decoders.
 
 # Acknowledgments
 {:numbered="false"}
