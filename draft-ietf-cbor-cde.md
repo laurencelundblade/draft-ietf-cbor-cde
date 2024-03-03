@@ -16,7 +16,7 @@ keyword:
 venue:
   group: "Concise Binary Object Representation Maintenance and Extensions (CBOR)"
   mail: "cbor@ietf.org"
-  github: "cabo/det"
+  github: cbor-wg/draft-ietf-cbor-cde
 
 author:
   -

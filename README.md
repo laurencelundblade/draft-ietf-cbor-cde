@@ -1,12 +1,13 @@
 # CBOR Deterministic Encoding Drafts
 
+[Access to branches](https://cbor-wg.github.io/draft-ietf-cbor-cde)
 
 ## CBOR Common Deterministic Encoding (CDE) -- WG document
 
-* [Editor's Copy](https://cabo.github.io/det/#go.draft-ietf-cbor-cde.html)
+* [Editor's Copy](https://cbor-wg.github.io/draft-ietf-cbor-cde/#go.draft-ietf-cbor-cde.html)
 * [Datatracker Page](https://datatracker.ietf.org/doc/draft-ietf-cbor-cde)
 * [Individual Draft](https://datatracker.ietf.org/doc/html/draft-ietf-cbor-cde)
-* [Compare Editor's Copy to Individual Draft](https://cabo.github.io/det/#go.draft-ietf-cbor-cde.diff)
+* [Compare Editor's Copy to Individual Draft](https://cbor-wg.github.io/draft-ietf-cbor-cde/#go.draft-ietf-cbor-cde.diff)
 
 
 ## Related Individual Internet-Drafts from Carsten Bormann
@@ -19,10 +20,10 @@ with [github repo here](https://github.com/BlockchainCommons/WIPs-IETF-draft-det
 
 ### CBOR: On Deterministic Encoding (Explainer)
 
-* [Editor's Copy](https://cabo.github.io/det/#go.draft-bormann-cbor-det.html)
+* [Editor's Copy](https://cbor-wg.github.io/draft-ietf-cbor-cde/#go.draft-bormann-cbor-det.html)
 * [Datatracker Page](https://datatracker.ietf.org/doc/draft-bormann-cbor-det)
 * [Individual Draft](https://datatracker.ietf.org/doc/html/draft-bormann-cbor-det)
-* [Compare Editor's Copy to Individual Draft](https://cabo.github.io/det/#go.draft-bormann-cbor-det.diff)
+* [Compare Editor's Copy to Individual Draft](https://cbor-wg.github.io/draft-ietf-cbor-cde/#go.draft-bormann-cbor-det.diff)
 
 ## Contributing
 
