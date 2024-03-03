@@ -93,9 +93,9 @@ Requirements_ defined for CBOR in
 {{Section 4.2.1 of RFC8949@-cbor}}.
 
 In many cases, CBOR provides more than one way to encode a data item,
-but also provides a recommendation for a *Preferred Encoding*.
+but also provides a recommendation for a *Preferred Serialization*.
 The *CoRE Deterministic Encoding Requirements* generally pick the
-preferred encodings as mandatory; they also pick additional choices
+preferred serializations as mandatory; they also pick additional choices
 such as definite-length encoding.
 Finally, it defines a map ordering based on lexicographic ordering of
 the (deterministically) encoded map keys.
@@ -121,7 +121,7 @@ types 0/1 in a seamless way.
 {{Section 4.2.2 of RFC8949@-cbor}} recommends handling this transition the same
 way as with the transition between different integer representation
 lengths in the basic generic data model, i.e., by mandating the
-Preferred Encoding ({{Section 3.4.3 of RFC8949@-cbor}}).
+Preferred Serialization ({{Section 3.4.3 of RFC8949@-cbor}}).
 
 {: group="1"}
 1. The CBOR Common Deterministic Encoding Profile (CDE) turns this
@@ -153,7 +153,7 @@ Specifically, CDE specifies (in the order of the bullet list at the end of {{Sec
 4.2.2 of RFC8949@-cbor}}):
 
 {: group="1"}
-2. Besides the mandated use of preferred encoding, there is no further
+2. Besides the mandated use of preferred serialization, there is no further
    specific action for the two different zero values, e.g., an encoder
    that is asked by an application to represent a negative floating
    point zero will generate 0xf98000.
@@ -163,7 +163,7 @@ Specifically, CDE specifies (in the order of the bullet list at the end of {{Sec
    independent of whether the floating point value is, mathematically,
    an integral value (choice 2 of the second bullet).
 4. There is no special handling of NaN values, except that the
-   preferred encoding rules also apply to NaNs with payloads, using
+   preferred serialization rules also apply to NaNs with payloads, using
    the canonical encoding of NaNs as defined in {{IEEE754}}.
    Specifically, this means that shorter forms of encodings for a NaN
    are used when that can be achieved by only removing trailing zeros
@@ -282,7 +282,7 @@ and are encouraged to do so.
 
 The security considerations in {{Section 10 of RFC8949@-cbor}} apply.
 The use of deterministic encoding can mitigate issues arising out of
-the use of non-preferred encodings specially crafted by an attacker.
+the use of non-preferred serializations specially crafted by an attacker.
 However, this effect only accrues if the decoder actually checks that
 deterministic encoding was applied correctly.
 More generally, additional security properties of deterministic
