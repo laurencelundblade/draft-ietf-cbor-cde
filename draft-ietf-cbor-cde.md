@@ -451,6 +451,25 @@ item, which follows the 3-bit field for the major type.
 1. CDE decoders MUST follow the rules for preferred serialization
    decoders ({{psd}}).
 
+
+# NaN and NaN Payloads {#nan}
+
+This section is about NaNs.
+
+## Test Vectors
+
+The IEEE-754 numbers are given as an unsigned integer in hex to show the bits that make up the floating-point value.
+
+| IEEE-754 Number | CBOR Encoding | Comment |
+| 0x7ff8000000000000 | 0xF97E00 | qNaN reduced from double to half |
+| 0x7ff8000000000001 | 0xFB7FF8000000000001 | Double can't be reduced because of bits set in payload |
+| 0x7ffffc0000000000 | 0xF97FFF | 10 bit payload in double that can be reduced to half |
+| 0x7ff80000000003ff | 0xFB7FF80000000003FF | 10 bit payload in doube that can't be reduced |
+| 0x7ffFFFFFE0000000 | 0xFA7FFFFFFF | 23 bit payload that reduces to single |
+| 0x7ffFFFFFF0000000 | 0xFB7FFFFFFFF0000000 | 24 bit payload that can't be reduced |
+| 0x7fffffffffffffff | 0xFB7FFFFFFFFFFFFFFF | All payload bits set |
+
+
 # Acknowledgments
 {:numbered="false"}
 
