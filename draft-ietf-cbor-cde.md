@@ -453,13 +453,16 @@ item, which follows the 3-bit field for the major type.
 
 # NaN and NaN Payload
 
+## Overview
 The purpose of this appendix is twofold:
-Recommendations to CBOR protocol designers for IEEE-754 NaN (Not a Number) and NaN payload use
-Recommendations to CBOR library implementors for NaN and NaN payload support
+1) Recommendations to CBOR protocol designers for IEEE-754 NaN (Not a Number) and NaN payload use,
+2) Recommendations to CBOR library implementors for NaN and NaN payload support
 
-The short answer is that protocol designers can feel free to use NaNs, but should avoid NaN payloads as there are better alternatives.
+The short answer is that protocol designers can feel free to use NaNs, but should avoid NaN payloads as there are alternate CBOR protocol constructs that are better.
 Some protocol designs may prohibit NaN payloads.
 CBOR libraries really must support NaN’s and may consider supporting NaN payloads.
+
+## CBOR Protocol Designs
 
 IEEE 754 floating-point has a special value called a NaN (Not a Number) value.
 Its primary purpose is to represent things like division by zero when doing local calculation.
@@ -471,7 +474,7 @@ The payload’s primary purpose is diagnostic information to explain why a NaN w
 The most common use is to distinguish between a signaling and quiet NaN in local calculations, but that has no applicability in CBOR.
 There is no standard for the contents of a NaN payload.
 
-CBOR allows NaN’s with payloads to be transmitted.
+CBOR allows NaNs with payloads to be transmitted.
 
 If a protocol design prohibits NaN payloads and is using preferred serialization then NaN must be encoded as a half-precision with the payload as 0, specifically F97E00.
 If a design prohibits payloads and preferred serialization is not used, then the single and double precisions NaNs, 0xFA7FC00000 and 0xFB7FF0000000000000 may also be used.
@@ -492,6 +495,8 @@ If the type is integer, then it is out-of-band and the integer contains what you
 This will work with every reasonably functional and complete CBOR library.
 It is supported in EDN and CDDL. It is easy implementable every programming environment.
 The size of the data transmitted is never bigger than and often smaller than using a NaN payload.
+
+## Details for NaN Payload Implementations
 
 The rest of the discussion in this appendix is for NaN payload implementors. CBOR libraries should consider supporting NaN payloads, but are not required to.
 
@@ -514,6 +519,20 @@ The algorithm for this conversion is essentially the same as for preferred seria
 Some CPU instructions that convert between single and double will actually do this correctly (this was tested for the writing of this appendix).
 However, there is no standard for NaN payloads and floating-point hardware and libraries are allowed to use them as they wish, this behavior should not be assumed.
 CBOR libraries should test on each platform or provide a platform-independent implementation. Test vectors are provided below.
+
+## Test Vectors
+
+The IEEE-754 numbers are given as an unsigned integer in hex to show the bits that make up the floating-point value.
+
+| IEEE-754 Number | CBOR Encoding | Comment |
+| 0x7ff8000000000000 | 0xF97E00 | qNaN reduced from double to half |
+| 0x7ff8000000000001 | 0xFB7FF8000000000001 | Double can't be reduced because of bits set in payload |
+| 0x7ffffc0000000000 | 0xF97FFF | 10 bit payload in double that can be reduced to half |
+| 0x7ff80000000003ff | 0xFB7FF80000000003FF | 10 bit payload in doube that can't be reduced |
+| 0x7ffFFFFFE0000000 | 0xFA7FFFFFFF | 23 bit payload that reduces to single |
+| 0x7ffFFFFFF0000000 | 0xFB7FFFFFFFF0000000 | 24 bit payload that can't be reduced |
+| 0x7fffffffffffffff | 0xFB7FFFFFFFFFFFFFFF | All payload bits set |
+
 
 # Acknowledgments
 {:numbered="false"}
