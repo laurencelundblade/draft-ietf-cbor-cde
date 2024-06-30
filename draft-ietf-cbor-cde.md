@@ -458,8 +458,9 @@ The purpose of this appendix is twofold:
 1) Recommendations to CBOR protocol designers for IEEE-754 NaN (Not a Number) and NaN payload use,
 2) Recommendations to CBOR library implementors for NaN and NaN payload support
 
-The short answer is that protocol designers can feel free to use NaNs, but should avoid NaN payloads as there are alternate CBOR protocol constructs that are better.
+The short answer is that protocol designers can mostly feel free to use NaNs, but should avoid NaN payloads as there are alternate CBOR protocol constructs that are better.
 Some protocol designs may prohibit NaN payloads.
+Protocol designs that are to work in CBOR and JSON should not use NaN or NaN payloads.
 CBOR libraries really must support NaN’s and may consider supporting NaN payloads.
 
 ## CBOR Protocol Designs
@@ -490,15 +491,33 @@ As a CBOR protocol designer, better constructs are available than the NaN payloa
 For example allow a float-point value to be an integer.
 If the type is integer, then it is out-of-band and the integer contains what you would have put in the NaN payload. In CDDL:
 
-     Nan-payload-alt = int / float
+     Nan-payload-alt = float / int
 
 This will work with every reasonably functional and complete CBOR library.
 It is supported in EDN and CDDL. It is easy implementable every programming environment.
 The size of the data transmitted is never bigger than and often smaller than using a NaN payload.
 
+Note also that JSON doesn't allow NaN, let alone NaN payloads.
+Consider this for a protocol that can work in JSON or CBOR.
+
+    Float-with-oob = float / NULL
+
+This can work for a JSON+CBOR protocol that desires something like a NaN payload
+
+    Nan-payload-alt2 = float / int / NULL
+
+In all the two above CDDL constructs, float never is a NaN.
+
+
 ## Details for NaN Payload Implementations
 
-The rest of the discussion in this appendix is for NaN payload implementors. CBOR libraries should consider supporting NaN payloads, but are not required to.
+The rest of the discussion in this appendix is for NaN payload implementors.
+
+There are very few MUSTs in CBOR so as allow its use in a large variety of constrained use cases.
+For example, support for integers is not required because some protocol might need only strings.
+The recommendation here is that any CBOR library that supports floating-point should support NaN.
+Support for NaN usually requires no work at all.
+CBOR libraries may consider supporting NaN payloads.
 
 In most programming environments there are no APIs or other to support encoding or decoding a NaN with a payload.
 You have to be familiar with the internal structure of an IEEE-754 floating-point value. Then you can use bit shifts and masks to create a NaN with a payload.
