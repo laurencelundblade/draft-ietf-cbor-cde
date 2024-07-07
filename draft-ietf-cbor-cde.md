@@ -181,10 +181,11 @@ Specifically, CDE specifies (in the order of the bullet list at the end of {{Sec
    values using other representations (e.g., tag 4/5).
 
 The main intent here is to preserve the basic generic data model, so
-Application Profiles can make their own decisions within that data model.
-E.g., an application profile can decide that it only ever allows a
+applications (or Application Profiles, see {{application-profiles}}) can
+make their own decisions within that data model.
+E.g., an application (profile) can decide that it only ever allows a
 single NaN value that would encoded as 0xf97e00, so a CDE
-implementation focusing on this application profile would not need to
+implementation focusing on this application (profile) would not need to
 provide processing for other NaN values.
 Basing the definition of both CDE and Application Profiles on the
 generic data model of CBOR also means that there is no effect on CDDL
