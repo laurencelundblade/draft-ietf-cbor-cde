@@ -451,8 +451,8 @@ item, which follows the 3-bit field for the major type.
 
 1. CDE encoders MUST generate CBOR that fulfills basic validity
    ({{Section 5.3.1 of RFC8949@-cbor}}).  Note that this includes not
-   emitting duplicate keys in a major type 5 map as well as invalid
-   UTF-8 in major type 3 text strings.
+   emitting duplicate keys in a major type 5 map as well as emitting
+   only valid UTF-8 in major type 3 text strings.
 
 ### CDE Decoders
 
