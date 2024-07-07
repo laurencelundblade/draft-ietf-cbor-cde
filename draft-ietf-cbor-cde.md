@@ -188,8 +188,9 @@ single NaN value that would encoded as 0xf97e00, so a CDE
 implementation focusing on this application (profile) would not need to
 provide processing for other NaN values.
 Basing the definition of both CDE and Application Profiles on the
-generic data model of CBOR also means that there is no effect on CDDL
-{{-cddl}}, except where the data description documents encoding decision
+generic data model of CBOR also means that there is no effect on the
+Concise Data Definition Language (CDDL)
+{{-cddl}}, except where the data description documents encoding decisions
 for byte strings carrying embedded CBOR.
 
 # Application Profiles
