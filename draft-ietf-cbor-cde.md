@@ -181,14 +181,16 @@ Specifically, CDE specifies (in the order of the bullet list at the end of {{Sec
    values using other representations (e.g., tag 4/5).
 
 The main intent here is to preserve the basic generic data model, so
-Application Profiles can make their own decisions within that data model.
-E.g., an application profile can decide that it only ever allows a
+applications (or Application Profiles, see {{application-profiles}}) can
+make their own decisions within that data model.
+E.g., an application (profile) can decide that it only ever allows a
 single NaN value that would encoded as 0xf97e00, so a CDE
-implementation focusing on this application profile would not need to
+implementation focusing on this application (profile) would not need to
 provide processing for other NaN values.
 Basing the definition of both CDE and Application Profiles on the
-generic data model of CBOR also means that there is no effect on CDDL
-{{-cddl}}, except where the data description documents encoding decision
+generic data model of CBOR also means that there is no effect on the
+Concise Data Definition Language (CDDL)
+{{-cddl}}, except where the data description documents encoding decisions
 for byte strings carrying embedded CBOR.
 
 # Application Profiles
@@ -214,7 +216,8 @@ encoder/decoder implementations.
 An Application Profile implementation produces well-formed,
 deterministically encoded CBOR according to {{STD94}}, and existing
 generic CBOR decoders will therefore be able to decode it, including
-those that check for Deterministic Encoding.
+those that check for Deterministic Encoding ("CDE decoders", see also
+{{impcheck}}).
 Similarly, generic CBOR encoders will be able to produce valid CBOR
 that can be processed by Application Profile implementations, if
 handed Application Profile conforming data model level information
@@ -341,7 +344,7 @@ Notes:
 
 * CBOR decoders in general are not required to check for preferred
   serialization or CDE and reject inputs that do not do not fulfill
-  their requirements..
+  their requirements.
   However, in an environment that employs deterministic encoding, this
   negates many of its benefits.
   Decoder implementations that advertise "support" for preferred
@@ -446,10 +449,23 @@ item, which follows the 3-bit field for the major type.
    The sorting is byte-wise lexicographic order of the encoded map
    key data items.
 
+1. CDE encoders MUST generate CBOR that fulfills basic validity
+   ({{Section 5.3.1 of RFC8949@-cbor}}).  Note that this includes not
+   emitting duplicate keys in a major type 5 map as well as emitting
+   only valid UTF-8 in major type 3 text strings.
+
 ### CDE Decoders
+
+The term "CDE Decoder" is a shorthand for a CBOR decoder that
+advertises _supporting_ CDE (see the start of this appendix).
 
 1. CDE decoders MUST follow the rules for preferred serialization
    decoders ({{psd}}).
+
+1. CDE decoders MUST check for ordering map keys and for basic
+   validity of the CBOR encoding (see {{Section 5.3.1 of
+   RFC8949@-cbor}}, which includes a check against duplicate map keys
+   and invalid UTF-8).
 
 # Acknowledgments
 {:numbered="false"}
