@@ -69,17 +69,31 @@ informative:
     large set of applications with potentially diverging detailed
     requirements.
 
-    This document also introduces the concept of Application Profiles,
-    which are layered on top of the CBOR CDE Profile and can address
-    more application specific requirements.
-    Application Profiles are defined in separate documents.
-
 --- middle
 
 # Introduction
 
 [^abs1-]
-{{-dcbor-orig}} is an example for such a document.
+
+## Structure of This Document
+
+After introductory material, {{dep}} defines the CBOR Common
+Deterministic Encoding Profile (CDE).
+{{cddl-support}} defines Concise Data Definition Language (CDDL) support for indicating the use of CDE.
+This is followed by the conventional sections for
+{{<<seccons}} ({{<seccons}}),
+{{<<sec-iana}} ({{<sec-iana}}),
+and {{<<sec-combined-references}} ({{<sec-combined-references}}).
+
+The informative {{application-profiles}} introduces the concept of Application Profiles,
+which are layered on top of the CBOR CDE Profile and can address
+requirements on deterministic representation
+of application data that are specific to a set of applications.
+(Application Profiles themselves, if needed, are defined in separate
+documents.)
+
+The informative {{impcheck}} provides brief checklists that implementers
+can use to check their CDE implementations.
 
 ## Conventions and Definitions
 
@@ -193,7 +207,11 @@ Concise Data Definition Language (CDDL)
 {{-cddl}}, except where the data description documents encoding decisions
 for byte strings carrying embedded CBOR.
 
+--- back
+
 # Application Profiles
+
+This appendix is informative.
 
 While the CBOR Common Deterministic Encoding Profile (CDE) provides
 for commonality between different applications of CBOR, it is useful
@@ -243,6 +261,7 @@ numbers (or any other kind of number, such as arbitrary precision
 integers or 64-bit negative integers) when they are used with
 applications that do not use them.
 
+--- middle
 
 # CDDL support
 
@@ -281,7 +300,7 @@ that also embody the processing required by the Application Profile,
 and are encouraged to do so.
 
 
-# Security Considerations
+# Security Considerations {#seccons}
 
 The security considerations in {{Section 10 of RFC8949@-cbor}} apply.
 The use of deterministic encoding can mitigate issues arising out of
@@ -291,7 +310,7 @@ deterministic encoding was applied correctly.
 More generally, additional security properties of deterministic
 encoding can rely on this check being performed properly.
 
-# IANA Considerations
+# IANA Considerations {#sec-iana}
 
 [^to-be-removed]
 
