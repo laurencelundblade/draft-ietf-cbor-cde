@@ -87,8 +87,9 @@ and {{<<sec-combined-references}} ({{<sec-combined-references}}).
 
 The informative {{application-profiles}} introduces the concept of Application Profiles,
 which are layered on top of the CBOR CDE Profile and can address
-requirements on deterministic representation
-of application data that are specific to a set of applications.
+recurring requirements on deterministic representation
+of application data where these requirements are specific to a set of
+applications.
 (Application Profiles themselves, if needed, are defined in separate
 documents.)
 
@@ -97,7 +98,7 @@ can use to check their CDE implementations.
 
 ## Conventions and Definitions
 
-{::boilerplate bcp14-tagged}
+{::boilerplate bcp14-tagged-bcp14}
 
 # CBOR Common Deterministic Encoding Profile (CDE) {#dep}
 
@@ -111,7 +112,7 @@ but also provides a recommendation for a *Preferred Serialization*.
 The *CoRE Deterministic Encoding Requirements* generally pick the
 preferred serializations as mandatory; they also pick additional choices
 such as definite-length encoding.
-Finally, it defines a map ordering based on lexicographic ordering of
+Finally, they define a map ordering based on lexicographic ordering of
 the (deterministically) encoded map keys.
 
 Note that this specific set of requirements is elective — in
@@ -149,8 +150,9 @@ Most tags capture more specific application semantics and therefore
 may be harder to define a deterministic encoding for.
 While the deterministic encoding of their tag internals is often
 covered by the _Core Deterministic Encoding Requirements_, the mapping
-of diverging platform application data types on the tag contents may
-be hard to do in a deterministic way; see {{Section 3.2 of -det}} for
+of diverging platform application data types onto the tag contents may
+require additional attention to perform it in a deterministic way; see
+{{Section 3.2 of -det}} for
 more explanation as well as examples.
 As the CDE would continually
 need to address additional issues raised by the registration of new
@@ -182,30 +184,33 @@ Specifically, CDE specifies (in the order of the bullet list at the end of {{Sec
    Specifically, this means that shorter forms of encodings for a NaN
    are used when that can be achieved by only removing trailing zeros
    in the payload.
-   Further clarifying {{IEEE754}}, the CBOR encoding uses a leading bit
-   of 1 to encode a quiet NaN; encoding of signaling NaN is NOT
+   Further clarifying a "should"-level statement in Section 6.2.1 of
+   {{IEEE754}}, the CBOR encoding uses a leading bit of 1 in the
+   significand to encode a quiet NaN; encoding of signaling NaN is NOT
    RECOMMENDED but is achieved by using a leading bit of 0.
 
    Typically, most applications that employ NaNs in their storage and
-   communication interfaces will only use the NaN with payload 0,
+   communication interfaces will only use a quiet NaN with payload 0,
    which therefore deterministically encodes as 0xf97e00.
 5. There is no special handling of subnormal values.
 6. The CBOR Common Deterministic Encoding Profile does not presume
    equivalence of basic floating point values with floating point
    values using other representations (e.g., tag 4/5).
+   Such equivalences and related deterministic representation rules
+   can be added at the application (profile) level if desired.
 
 The main intent here is to preserve the basic generic data model, so
 applications (or Application Profiles, see {{application-profiles}}) can
 make their own decisions within that data model.
 E.g., an application (profile) can decide that it only ever allows a
-single NaN value that would encoded as 0xf97e00, so a CDE
+single NaN value that would be encoded as 0xf97e00, so a CDE
 implementation focusing on this application (profile) would not need to
 provide processing for other NaN values.
 Basing the definition of both CDE and Application Profiles on the
 generic data model of CBOR also means that there is no effect on the
 Concise Data Definition Language (CDDL)
 {{-cddl}}, except where the data description documents encoding decisions
-for byte strings carrying embedded CBOR.
+for byte strings that carry embedded CBOR.
 
 --- back
 
@@ -214,17 +219,14 @@ for byte strings carrying embedded CBOR.
 This appendix is informative.
 
 While the CBOR Common Deterministic Encoding Profile (CDE) provides
-for commonality between different applications of CBOR, it is useful
+for commonality between different applications of CBOR, it can be useful
 to further constrain the set of data items handled in a group of
 applications (_exclusions_) and to define further mappings
 (_reductions_) that help the applications in such a group get by with
 the exclusions.
 
 For example, the dCBOR Application Profile specifies the use of
-Deterministic Encoding as defined in {{Section 4.2 of RFC8949@-cbor}} (see also
-{{-det}} for more information) together with some application-level rules.
-See {{-dcbor-orig}} for a definition of the dCBOR Application Profile that
-makes use of CDE.
+CDE together with some application-level rules {{-dcbor-orig}}.
 
 In general, the application-level rules specified by an Application Profile are
 based on the shared CBOR Common Deterministic Encoding Profile; they do
@@ -271,12 +273,12 @@ CBOR-encoded data items (`.cborseq`).
 
 CDDL specifications may want to specify that the data items should be
 encoded in Common CBOR Deterministic Encoding.
-This specification adds two CDDL control operators that can be used
+The present specification adds two CDDL control operators that can be used
 for this.
 
 The control operators `.cde` and `.cdeseq` are exactly like `.cbor` and
 `.cborseq` except that they also require the encoded data item(s) to be
-in Common CBOR Deterministic Encoding.
+encoded according to CDE.
 
 For example, a byte string of embedded CBOR that is to be encoded
 according to CDE can be formalized as:
@@ -286,7 +288,7 @@ leaf = #6.24(bytes .cde any)
 ~~~
 
 More importantly, if the encoded data item also needs to have a
-specific structure, this can be expressed by the right hand side
+specific structure, this can be expressed by the right-hand side
 (instead of using the most general CDDL type `any` here).
 
 (Note that the `.cborseq` control operator does not enable specifying
@@ -295,7 +297,7 @@ sequence.  If a use case for such a feature becomes known, it could be
 added.)
 
 
-Obviously, Application Profiles can define similar control operators
+Obviously, Application Profiles can define related control operators
 that also embody the processing required by the Application Profile,
 and are encouraged to do so.
 
@@ -362,10 +364,10 @@ Notes:
   the data model by restricting some values and ranges.
 
 * CBOR decoders in general are not required to check for preferred
-  serialization or CDE and reject inputs that do not do not fulfill
+  serialization or CDE and reject inputs that do not fulfill
   their requirements.
-  However, in an environment that employs deterministic encoding, this
-  negates many of its benefits.
+  However, in an environment that employs deterministic encoding,
+  employing non-checking CBOR decoders negates many of its benefits.
   Decoder implementations that advertise "support" for preferred
   serialization or CDE need to check the encoding and reject
   input that is not encoded to the encoding specification in use.
