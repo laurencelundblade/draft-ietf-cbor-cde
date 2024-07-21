@@ -469,7 +469,9 @@ item, which follows the 3-bit field for the major type.
    * If double-precision values are accepted, single-precision values
      MUST be accepted.
 
-   * NaNs, and thus NaN payloads, MUST be accepted.
+   * Infinites and NaNs, and thus NaN payloads, MUST be accepted and
+     presented to the application (not necessarily in the platform
+     number format, if that doesn't support those values).
 
 
 ## CDE
