@@ -321,7 +321,8 @@ encoding can rely on this check being performed properly.
 
 This document requests IANA to register the contents of
 {{tbl-iana-reqs}} into the registry
-"{{cddl-control-operators (CDDL Control Operators)<IANA.cddl}}" of {{IANA.cddl}}:
+"{{cddl-control-operators (CDDL Control Operators)<IANA.cddl}}" of the
+{{IANA.cddl}} registry group:
 
 | Name      | Reference |
 | .cde      | \[RFCXXXX] |
