@@ -54,6 +54,7 @@ normative:
 informative:
   I-D.bormann-cbor-det: det
   I-D.mcnally-deterministic-cbor: dcbor-orig
+  I-D.bormann-cbor-numbers: numbers
 
 --- abstract
 
@@ -178,14 +179,17 @@ Specifically, CDE specifies (in the order of the bullet list at the end of {{Sec
    floating-point representation that accurately represents the value,
    independent of whether the floating point value is, mathematically,
    an integral value (choice 2 of the second bullet).
-4. There is no special handling of NaN values, except that the
-   preferred serialization rules also apply to NaNs with payloads, using
-   the canonical encoding of NaNs as defined in {{IEEE754}}.
+4. Apart from finite and infinite numbers, {{IEEE754}} floating point
+   values include NaN (not a number) values {{-numbers}}.
+   In CDE, there is no special handling of NaN values, except that the
+   preferred serialization rules also apply to NaNs (with zero or
+   non-zero payloads), using the canonical encoding of NaNs as defined
+   in Section 6.2.1 of {{IEEE754}}.
    Specifically, this means that shorter forms of encodings for a NaN
    are used when that can be achieved by only removing trailing zeros
-   in the payload.
+   in the NaN payload.
    Further clarifying a "should"-level statement in Section 6.2.1 of
-   {{IEEE754}}, the CBOR encoding uses a leading bit of 1 in the
+   {{IEEE754}}, the CBOR encoding always uses a leading bit of 1 in the
    significand to encode a quiet NaN; encoding of signaling NaN is NOT
    RECOMMENDED but is achieved by using a leading bit of 0.
 
