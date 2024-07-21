@@ -52,7 +52,7 @@ informative:
 #    =: RFC9052
   RFC7493: ijson
   RFC3339:
-  I-D.ietf-sedate-datetime-extended: sedate
+  RFC9557: sedate
   IEEE754:
     target: https://ieeexplore.ieee.org/document/8766229
     title: IEEE Standard for Floating-Point Arithmetic
@@ -187,7 +187,7 @@ diagnostic notation).
 
 While this document is informative, it does use certain keywords to
 indicate practical requirements for interoperability.
-{::boilerplate bcp14-tagged}
+{::boilerplate bcp14-tagged-bcp14}
 
 
 # Use Cases for Deterministic Encoding
@@ -526,7 +526,7 @@ Alternatively, instead of replacing `+cbor`, an indication of
 Deterministic Encoding could be provided by adding multiple suffixes
 to the SSS concept.
 There is an ongoing effort to define a more complex structure of media
-type suffixes, as documented in {{I-D.ietf-mediaman-suffixes}}.
+type suffixes, as documented in {{-multiple}}.
 In general, the combination of multiple SSS in one media type name
 raises similar questions to the multiple inheritance problem in
 object-oriented programming languages, so it may not be easy to use
