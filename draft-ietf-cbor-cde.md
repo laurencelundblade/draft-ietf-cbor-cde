@@ -416,6 +416,17 @@ item, which follows the 3-bit field for the major type.
      (This will always reduce a double or single quiet NaN with a zero
      NaN payload to a half-precision quiet NaN.)
 
+1. If big numbers (tags 2 and 3) are supported, the following apply:
+
+   * Positive values from 0 to 2^63 - 1 MUST be encoded as a type 0 integer.
+
+   * Negative values from -1 tp -(2^64) MUST be encoded as a type 1 integer.
+
+   * Leading zeros MUST not be present in the byte string content of tag 2 and 3.
+
+1. If big floats or decimal fractions with a big number mantissa are supported, the
+   big number serialization must conform to the above requirements for big numbers.
+
 ### Preferred Serialization Decoders {#psd}
 
 1. Decoders MUST accept shortest-form encoded arguments.
@@ -435,6 +446,12 @@ item, which follows the 3-bit field for the major type.
      MUST be accepted.
 
    * NaNs, and thus NaN payloads, MUST be accepted.
+
+1. If big numbers (tags 2 and 3) are supported, type 0 and type 1 integers MUST
+   be accepted as a big number.
+
+1. If big floats or decimal fractions with a big number mantissa are supported,
+   type 0 and type 1 integers must be accepted for the big number mantissa.
 
 
 ## CDE
