@@ -54,6 +54,7 @@ normative:
 informative:
   I-D.bormann-cbor-det: det
   I-D.mcnally-deterministic-cbor: dcbor-orig
+  I-D.bormann-cbor-numbers: numbers
 
 --- abstract
 
@@ -178,16 +179,20 @@ Specifically, CDE specifies (in the order of the bullet list at the end of {{Sec
    floating-point representation that accurately represents the value,
    independent of whether the floating point value is, mathematically,
    an integral value (choice 2 of the second bullet).
-4. There is no special handling of NaN values, except that the
-   preferred serialization rules also apply to NaNs with payloads, using
-   the canonical encoding of NaNs as defined in {{IEEE754}}.
+4. Apart from finite and infinite numbers, {{IEEE754}} floating point
+   values include NaN (not a number) values {{-numbers}}.
+   In CDE, there is no special handling of NaN values, except that the
+   preferred serialization rules also apply to NaNs (with zero or
+   non-zero payloads), using the canonical encoding of NaNs as defined
+   in Section 6.2.1 of {{IEEE754}}.
    Specifically, this means that shorter forms of encodings for a NaN
    are used when that can be achieved by only removing trailing zeros
-   in the payload.
+   in the NaN payload.
    Further clarifying a "should"-level statement in Section 6.2.1 of
-   {{IEEE754}}, the CBOR encoding uses a leading bit of 1 in the
-   significand to encode a quiet NaN; encoding of signaling NaN is NOT
-   RECOMMENDED but is achieved by using a leading bit of 0.
+   {{IEEE754}}, the CBOR encoding always uses a leading bit of 1 in the
+   significand to encode a quiet NaN; the use of signaling NaNs by
+   application protocols is NOT RECOMMENDED but when presented by an
+   application these are encoded by using a leading bit of 0.
 
    Typically, most applications that employ NaNs in their storage and
    communication interfaces will only use a quiet NaN with payload 0,
@@ -321,7 +326,8 @@ encoding can rely on this check being performed properly.
 
 This document requests IANA to register the contents of
 {{tbl-iana-reqs}} into the registry
-"{{cddl-control-operators (CDDL Control Operators)<IANA.cddl}}" of {{IANA.cddl}}:
+"{{cddl-control-operators (CDDL Control Operators)<IANA.cddl}}" of the
+{{IANA.cddl}} registry group:
 
 | Name      | Reference |
 | .cde      | \[RFCXXXX] |
@@ -347,6 +353,10 @@ Notes:
   RFC8949@-cbor}}.
   The purpose of the restatement is to aid the work of implementers,
   not to redefine anything.
+
+  Preferred Serialization Encoders and Decoders as well as CDE
+  Encoders and Decoders have certain properties that are expressed
+  using {{RFC2119}} keywords in this appendix.
 
 * Duplicate map keys are never valid in CBOR at all (see
   list item "Major type 5" in {{Section 3.1 of RFC8949@-cbor}})
@@ -420,22 +430,27 @@ item, which follows the 3-bit field for the major type.
      emitted.
      That is, encoders MUST support half-precision and
      single-precision floating point.
-     Positive and negative infinity and zero MUST be represented in
-     half-precision floating point.
 
-   * NaNs, and thus NaN payloads MUST be supported.
+   * {{IEEE754}} Infinites and NaNs, and thus NaN payloads, MUST be
+     supported, to the extent possible on the platform.
 
-     As with all floating point numbers, NaNs with payloads MUST be
-     reduced to the shortest of double, single or half precision that
-     preserves the NaN payload.
-     The reduction is performed by removing the rightmost N bits of the
+     As with all floating point numbers, Infinites and NaNs MUST be
+     encoded in the shortest of double, single or half precision that
+     preserves the value:
+
+     * Positive and negative infinity and zero MUST be represented in
+       half-precision floating point.
+
+     * For NaNs, the value to be preserved includes the sign bit,
+     the quiet bit, and the NaN payload (whether zero or non-zero).
+     The shortest form is obtained by removing the rightmost N bits of the
      payload, where N is the difference in the number of bits in the
-     significand (mantissa) between the original format and the
-     reduced format.
-     The reduction is performed only (preserves the value only) if all the
+     significand (mantissa representation) between the original format
+     and the shortest format.
+     This trimming is performed only (preserves the value only) if all the
      rightmost bits removed are zero.
-     (This will always reduce a double or single quiet NaN with a zero
-     NaN payload to a half-precision quiet NaN.)
+     (This will always represent a double or single quiet NaN with a zero
+     NaN payload in a half-precision quiet NaN.)
 
 ### Preferred Serialization Decoders {#psd}
 
@@ -455,7 +470,9 @@ item, which follows the 3-bit field for the major type.
    * If double-precision values are accepted, single-precision values
      MUST be accepted.
 
-   * NaNs, and thus NaN payloads, MUST be accepted.
+   * Infinites and NaNs, and thus NaN payloads, MUST be accepted and
+     presented to the application (not necessarily in the platform
+     number format, if that doesn't support those values).
 
 
 ## CDE
