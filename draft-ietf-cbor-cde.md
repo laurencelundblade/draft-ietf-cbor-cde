@@ -353,6 +353,10 @@ Notes:
   The purpose of the restatement is to aid the work of implementers,
   not to redefine anything.
 
+  Preferred Serialization Encoders and Decoders as well as CDE
+  Encoders and Decoders have certain properties that are expressed
+  using {{RFC2119}} keywords in this appendix.
+
 * Duplicate map keys are never valid in CBOR at all (see
   list item "Major type 5" in {{Section 3.1 of RFC8949@-cbor}})
   no matter what sort of serialization is used.
