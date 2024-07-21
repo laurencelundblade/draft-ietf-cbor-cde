@@ -190,8 +190,9 @@ Specifically, CDE specifies (in the order of the bullet list at the end of {{Sec
    in the NaN payload.
    Further clarifying a "should"-level statement in Section 6.2.1 of
    {{IEEE754}}, the CBOR encoding always uses a leading bit of 1 in the
-   significand to encode a quiet NaN; encoding of signaling NaN is NOT
-   RECOMMENDED but is achieved by using a leading bit of 0.
+   significand to encode a quiet NaN; the use of signaling NaNs by
+   application protocols is NOT RECOMMENDED but when presented by an
+   application these are encoded by using a leading bit of 0.
 
    Typically, most applications that employ NaNs in their storage and
    communication interfaces will only use a quiet NaN with payload 0,
