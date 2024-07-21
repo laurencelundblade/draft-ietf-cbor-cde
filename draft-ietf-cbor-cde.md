@@ -429,22 +429,27 @@ item, which follows the 3-bit field for the major type.
      emitted.
      That is, encoders MUST support half-precision and
      single-precision floating point.
-     Positive and negative infinity and zero MUST be represented in
-     half-precision floating point.
 
-   * NaNs, and thus NaN payloads MUST be supported.
+   * {{IEEE754}} Infinites and NaNs, and thus NaN payloads, MUST be
+     supported, to the extent possible on the platform.
 
-     As with all floating point numbers, NaNs with payloads MUST be
-     reduced to the shortest of double, single or half precision that
-     preserves the NaN payload.
-     The reduction is performed by removing the rightmost N bits of the
+     As with all floating point numbers, Infinites and NaNs MUST be
+     encoded in the shortest of double, single or half precision that
+     preserves the value:
+
+     * Positive and negative infinity and zero MUST be represented in
+       half-precision floating point.
+
+     * For NaNs, the value to be preserved includes the sign bit,
+     the quiet bit, and the NaN payload (whether zero or non-zero).
+     The shortest form is obtained by removing the rightmost N bits of the
      payload, where N is the difference in the number of bits in the
-     significand (mantissa) between the original format and the
-     reduced format.
-     The reduction is performed only (preserves the value only) if all the
+     significand (mantissa representation) between the original format
+     and the shortest format.
+     This trimming is performed only (preserves the value only) if all the
      rightmost bits removed are zero.
-     (This will always reduce a double or single quiet NaN with a zero
-     NaN payload to a half-precision quiet NaN.)
+     (This will always represent a double or single quiet NaN with a zero
+     NaN payload in a half-precision quiet NaN.)
 
 ### Preferred Serialization Decoders {#psd}
 
