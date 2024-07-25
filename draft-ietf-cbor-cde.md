@@ -33,7 +33,7 @@ contributor:
 - name: Laurence Lundblade
   org: Security Theory LLC
   email: lgl@securitytheory.com
-  contribution: Laurence provided the text that became {{impcheck}}.
+  contribution: Laurence provided most of the text that became {{impcheck}}.
 
 normative:
   STD94: cbor
@@ -69,6 +69,10 @@ informative:
     CBOR Common Deterministic Encoding (CDE) Profile that can be shared by a
     large set of applications with potentially diverging detailed
     requirements.
+    It also defines "Basic Serialization", which stops short of the
+    potentially more onerous requirements that make CDE fully
+    deterministic, while employing most of its reductions of the
+    variability needing to be handled by decoders.
 
 --- middle
 
@@ -96,6 +100,12 @@ documents.)
 
 The informative {{impcheck}} provides brief checklists that implementers
 can use to check their CDE implementations.
+{{ps}} provides a checklist for implementing Preferred Serialization.
+{{bs}} introduces "Basic Serialization", a slightly more restricted form
+of Preferred Serialization that may be used by encoders to hit a sweet
+spot for maximizing interoperability with partial (e.g., constrained)
+CBOR decoder implementations.
+{{cde}} further restricts Basic Serialization to arrive at CDE.
 
 ## Conventions and Definitions
 
@@ -389,7 +399,7 @@ Notes:
   to re-encode the decoded data and check for bit-to-bit equality with
   the original input.
 
-## Preferred Serialization
+## Preferred Serialization {#ps}
 
 In the following, the abbreviation "ai" will be used for the 5-bit
 additional information field in the first byte of an encoded CBOR data
@@ -413,12 +423,6 @@ item, which follows the 3-bit field for the major type.
      additional two bytes (ai = 0x19).
    * 65536 to 4294967295 and -65537 to -4294967296 MUST be encoded
      only with an additional four bytes (ai = 0x1a).
-
-1. If maps or arrays are emitted, they MUST use definite-length
-   encoding (never indefinite-length).
-
-1. If text or byte strings are emitted, they MUST use definite-length
-   encoding (never indefinite-length).
 
 1. If floating-point numbers are emitted, the following apply:
 
@@ -452,9 +456,27 @@ item, which follows the 3-bit field for the major type.
      (This will always represent a double or single quiet NaN with a zero
      NaN payload in a half-precision quiet NaN.)
 
+
+1. If tags 2 and 3 are supported, the following apply:
+
+   * Positive integers from 0 to 2^64 - 1 MUST be encoded as a type 0 integer.
+
+   * Negative integers from -(2^64) to -1 MUST be encoded as a type 1 integer.
+
+   * Leading zeros MUST not be present in the byte string content of tag 2 and 3.
+
+   (This also applies to the use of tags 2 and 3 within other tags,
+   such as 4 or 5.)
+
 ### Preferred Serialization Decoders {#psd}
 
-1. Decoders MUST accept shortest-form encoded arguments.
+There are no special requirements that CBOR decoders need to meet to
+be a Preferred Serialization Decoder.
+Partial decoder implementations need to pay attention to at least the
+following requirements:
+
+1. Decoders MUST accept shortest-form encoded arguments (see {{Section
+   3 of RFC8949@-cbor}}).
 
 1. If arrays or maps are supported, definite-length arrays or maps MUST be accepted.
 
@@ -469,18 +491,45 @@ item, which follows the 3-bit field for the major type.
      constrained environments.
    * If double-precision values are accepted, single-precision values
      MUST be accepted.
-
    * Infinites and NaNs, and thus NaN payloads, MUST be accepted and
      presented to the application (not necessarily in the platform
      number format, if that doesn't support those values).
 
+1. If big numbers (tags 2 and 3) are supported, type 0 and type 1 integers MUST
+   be accepted where a tag 2 or 3 would be accepted.  Leading zero bytes
+   in the tag content of a tag 2 or 3 MUST be ignored.
+
+## Basic Serialization  {#bs}
+
+Basic Serialization further restricts Preferred Serialization by not
+using indefinite length encoding.
+A CBOR encoder can choose to employ Basic Serialization in order to
+reduce the variability that needs to be handled by decoders,
+potentially maximizing interoperability with partial (e.g.,
+constrained) CBOR decoder implementations.
+
+### Basic Serialization Encoders {#bse}
+
+The Basic Serialization Encoder requirements are identical to the
+Preferred Serialization Encoder requirements, with the following additions:
+
+1. If maps or arrays are emitted, they MUST use definite-length
+   encoding (never indefinite-length).
+
+1. If text or byte strings are emitted, they MUST use definite-length
+   encoding (never indefinite-length).
+
+### Basic Serialization Decoders {#bsd}
+
+The Basic Serialization Decoder requirements are identical to the
+Preferred Serialization Decoder requirements.
 
 ## CDE
 
 ### CDE Encoders
 
-1. CDE encoders MUST only emit CBOR fulfilling the preferred
-   serialization rules ({{pse}}).
+1. CDE encoders MUST only emit CBOR fulfilling the basic
+   serialization rules ({{bse}}).
 
 1. CDE encoders MUST sort maps by the CBOR representation of the map
    key.
@@ -497,13 +546,18 @@ item, which follows the 3-bit field for the major type.
 The term "CDE Decoder" is a shorthand for a CBOR decoder that
 advertises _supporting_ CDE (see the start of this appendix).
 
-1. CDE decoders MUST follow the rules for preferred serialization
-   decoders ({{psd}}).
+1. CDE decoders MUST follow the rules for preferred (and thus basic)
+   serialization decoders ({{psd}}).
 
 1. CDE decoders MUST check for ordering map keys and for basic
    validity of the CBOR encoding (see {{Section 5.3.1 of
    RFC8949@-cbor}}, which includes a check against duplicate map keys
    and invalid UTF-8).
+
+   To be called a CDE decoder, it MUST NOT present to the application
+   a decoded data item that fails one of these checks (except maybe via
+   special diagnostic channels with no potential for confusion with a
+   correctly CDE-decoded data item).
 
 # Acknowledgments
 {:numbered="false"}
