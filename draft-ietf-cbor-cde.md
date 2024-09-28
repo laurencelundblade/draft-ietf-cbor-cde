@@ -463,7 +463,7 @@ item, which follows the 3-bit field for the major type.
 
    * Negative integers from -(2^64) to -1 MUST be encoded as a type 1 integer.
 
-   * Leading zeros MUST not be present in the byte string content of tag 2 and 3.
+   * Leading zeros MUST NOT be present in the byte string content of tag 2 and 3.
 
    (This also applies to the use of tags 2 and 3 within other tags,
    such as 4 or 5.)
