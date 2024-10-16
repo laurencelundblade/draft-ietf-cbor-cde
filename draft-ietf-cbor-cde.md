@@ -197,7 +197,8 @@ Specifically, CDE specifies (in the order of the bullet list at the end of {{Sec
    in Section 6.2.1 of {{IEEE754}}.
    Specifically, this means that shorter forms of encodings for a NaN
    are used when that can be achieved by only removing trailing zeros
-   in the NaN payload.
+   in the NaN payload (example serializations are available in
+   {{Section A.1.2 of -numbers}}).
    Further clarifying a "should"-level statement in Section 6.2.1 of
    {{IEEE754}}, the CBOR encoding always uses a leading bit of 1 in the
    significand to encode a quiet NaN; the use of signaling NaNs by
