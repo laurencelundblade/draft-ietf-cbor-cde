@@ -391,7 +391,9 @@ Notes:
   Application profiles such as dCBOR are different as they can affect
   the data model by restricting some values and ranges.
 
-* CBOR decoders in general are not required to check for preferred
+* CBOR decoders in general (as opposed to "CDE decoders" specifically
+  advertised as supporting CDE)
+  are not required to check for preferred
   serialization or CDE and reject inputs that do not fulfill
   their requirements.
   However, in an environment that employs deterministic encoding,
