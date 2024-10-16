@@ -55,6 +55,11 @@ informative:
   I-D.bormann-cbor-det: det
   I-D.mcnally-deterministic-cbor: dcbor-orig
   I-D.bormann-cbor-numbers: numbers
+  UAX-15:
+    title: "Unicode Normalization Forms"
+    rc: Unicode Standard Annex #15
+    target: https://unicode.org/reports/tr15/
+    date: false
 
 --- abstract
 
@@ -241,8 +246,10 @@ applications (_exclusions_) and to define further mappings
 (_reductions_) that help the applications in such a group get by with
 the exclusions.
 
-For example, the dCBOR Application Profile specifies the use of
-CDE together with some application-level rules {{-dcbor-orig}}.
+For example, the dCBOR Application Profile specifies the use of CDE
+together with some application-level rules {{-dcbor-orig}}, such as a
+requirement for all text strings to be in Unicode Normalization Form C
+(NFC) {{UAX-15}}.
 
 In general, the application-level rules specified by an Application Profile are
 based on the shared CBOR Common Deterministic Encoding Profile; they do
@@ -541,6 +548,12 @@ Preferred Serialization Decoder requirements.
    ({{Section 5.3.1 of RFC8949@-cbor}}).  Note that this includes not
    emitting duplicate keys in a major type 5 map as well as emitting
    only valid UTF-8 in major type 3 text strings.
+
+   Note also that CDE does NOT include a requirement for Unicode
+   normalization {{UAX-15}}; {{Section C of
+   ?I-D.bormann-dispatch-modern-network-unicode}} contains some
+   rationale that went into not requiring routine use of Unicode normalization
+   processes.
 
 ### CDE Decoders
 
