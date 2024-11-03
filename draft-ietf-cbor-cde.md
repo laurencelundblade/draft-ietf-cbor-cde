@@ -53,8 +53,13 @@ normative:
 
 informative:
   I-D.bormann-cbor-det: det
-  I-D.mcnally-deterministic-cbor: dcbor-orig
+  I-D.mcnally-deterministic-cbor: dcbor
   I-D.bormann-cbor-numbers: numbers
+  UAX-15:
+    title: "Unicode Normalization Forms"
+    rc: Unicode Standard Annex #15
+    target: https://unicode.org/reports/tr15/
+    date: false
 
 --- abstract
 
@@ -90,14 +95,6 @@ This is followed by the conventional sections for
 {{<<sec-iana}} ({{<sec-iana}}),
 and {{<<sec-combined-references}} ({{<sec-combined-references}}).
 
-The informative {{application-profiles}} introduces the concept of Application Profiles,
-which are layered on top of the CBOR CDE Profile and can address
-recurring requirements on deterministic representation
-of application data where these requirements are specific to a set of
-applications.
-(Application Profiles themselves, if needed, are defined in separate
-documents.)
-
 The informative {{impcheck}} provides brief checklists that implementers
 can use to check their CDE implementations.
 {{ps}} provides a checklist for implementing Preferred Serialization.
@@ -107,7 +104,30 @@ spot for maximizing interoperability with partial (e.g., constrained)
 CBOR decoder implementations.
 {{cde}} further restricts Basic Serialization to arrive at CDE.
 
+Instead of giving rise to the definition of application-specific,
+non-interoperable variants of CDE, this document identifies
+Application-level Deterministic Representation (ALDR) rules as a
+concept that is separate from CDE itself ({{aldr}}).
+ALDR rules are layered on top of the CBOR CDE Profile and address
+requirements on deterministic representation of application data
+that are specific to an application or a set of applications.
+ALDR rules are often provided with a specification for a CBOR-based
+protocol, or, if needed, can be provided by referencing a shared "ALDR
+Profile" that is defined in a separate document.
+
 ## Conventions and Definitions
+
+The conventions and definitions of {{-cbor}} apply.
+
+The term "CBOR Application" ("application" for short) is not
+explicitly defined in {{-cbor}}; this document uses it in the same sense
+as it is used there, specifically for applications that use CBOR as an
+interchange format and use (often generic) CBOR encoders/decoders to
+serialize/ingest the CBOR form of their application data to be
+exchanged.
+Similarly, "CBOR Protocol" is used as in {{-cbor}} for the protocol that
+governs the interchange of data in CBOR format for a specific
+application or set of applications.
 
 {::boilerplate bcp14-tagged-bcp14}
 
@@ -168,7 +188,7 @@ more explanation as well as examples.
 As the CDE would continually
 need to address additional issues raised by the registration of new
 tags, this specification recommends that new tag registrations address
-deterministic encoding in the context of this Profile.
+deterministic encoding in the context of CDE.
 
 A particularly difficult field to obtain deterministic encoding for is
 floating point numbers, partially because they themselves are often
@@ -197,7 +217,8 @@ Specifically, CDE specifies (in the order of the bullet list at the end of {{Sec
    in Section 6.2.1 of {{IEEE754}}.
    Specifically, this means that shorter forms of encodings for a NaN
    are used when that can be achieved by only removing trailing zeros
-   in the NaN payload.
+   in the NaN payload (example serializations are available in
+   {{Section A.1.2 of -numbers}}).
    Further clarifying a "should"-level statement in Section 6.2.1 of
    {{IEEE754}}, the CBOR encoding always uses a leading bit of 1 in the
    significand to encode a quiet NaN; the use of signaling NaNs by
@@ -205,31 +226,34 @@ Specifically, CDE specifies (in the order of the bullet list at the end of {{Sec
    application these are encoded by using a leading bit of 0.
 
    Typically, most applications that employ NaNs in their storage and
-   communication interfaces will only use a quiet NaN with payload 0,
+   communication interfaces will only use a single NaN value, quiet NaN with payload 0,
    which therefore deterministically encodes as 0xf97e00.
 5. There is no special handling of subnormal values.
-6. The CBOR Common Deterministic Encoding Profile does not presume
+6. CDE does not presume
    equivalence of basic floating point values with floating point
    values using other representations (e.g., tag 4/5).
    Such equivalences and related deterministic representation rules
-   can be added at the application (profile) level if desired.
+   can be added at the ALDR level if desired, e.g., by stipulating
+   additional equivalences and by restricting the set of data item values
+   actually used by an application.
 
 The main intent here is to preserve the basic generic data model, so
-applications (or Application Profiles, see {{application-profiles}}) can
+applications (in their ALDR rules or by referencing ALDR Profiles, see
+{{aldr}}) can
 make their own decisions within that data model.
-E.g., an application (profile) can decide that it only ever allows a
+E.g., an application's ALDR rules can decide that it only ever allows a
 single NaN value that would be encoded as 0xf97e00, so a CDE
-implementation focusing on this application (profile) would not need to
+implementation focusing on this application would not need to
 provide processing for other NaN values.
-Basing the definition of both CDE and Application Profiles on the
+Basing the definition of both CDE and ALDR rules on the
 generic data model of CBOR also means that there is no effect on the
 Concise Data Definition Language (CDDL)
-{{-cddl}}, except where the data description documents encoding decisions
-for byte strings that carry embedded CBOR.
+{{-cddl}}, except where the data description is documenting specific
+encoding decisions for byte strings that carry embedded CBOR.
 
 --- back
 
-# Application Profiles
+# Application-level Deterministic Representation Rules {#aldr}
 
 This appendix is informative.
 
@@ -240,40 +264,48 @@ applications (_exclusions_) and to define further mappings
 (_reductions_) that help the applications in such a group get by with
 the exclusions.
 
-For example, the dCBOR Application Profile specifies the use of
-CDE together with some application-level rules {{-dcbor-orig}}.
+For example, the dCBOR ALDR Profile {{-dcbor}} specifies the use of CDE
+together with some application-level rules, such as a
+requirement for all text strings to be in Unicode Normalization Form C
+(NFC) {{UAX-15}} — this specific requirement is an example for an _exclusion_ of
+non-NFC data at the application level, and it invites implementing a _reduction_ by
+routine normalization of text strings.
 
-In general, the application-level rules specified by an Application Profile are
-based on the shared CBOR Common Deterministic Encoding Profile; they do
-not "fork" CBOR in the sense of requiring distinct generic
-encoder/decoder implementations.
+ALDR rules (including those specified by an ALDR Profile) enable
+simply using the shared CBOR Common Deterministic Encoding Profile; they do not
+"fork" CBOR in the sense of requiring distinct generic encoder/decoder
+implementations.
 
-An Application Profile implementation produces well-formed,
+An implementation of specific ALDR rules combined with a CDE
+implementation produces well-formed,
 deterministically encoded CBOR according to {{STD94}}, and existing
 generic CBOR decoders will therefore be able to decode it, including
 those that check for Deterministic Encoding ("CDE decoders", see also
 {{impcheck}}).
 Similarly, generic CBOR encoders will be able to produce valid CBOR
-that can be processed by Application Profile implementations, if
-handed Application Profile conforming data model level information
-from an application.
+that can be processed by an implementation enforcing an application's
+ALDR rule set if the encoder was handed data model level information
+from an application that simply conformed to the application's ALDR rules.
 
 Please note that the separation between standard CBOR processing and
-the processing required by the Application Profile is a conceptual
-one: Instead of employing generic encoders/decoders, both Application
-Profile processing and standard CBOR processing
-can be combined into a encoder/decoder specifically designed for the
-Application Profile.
+the processing required by the ALDR rules is a conceptual one:
+Instead of employing generic encoders/decoders, both ALDR rule
+processing and standard CBOR processing can be combined into an
+encoder/decoder specifically designed for a particular set of ALDR
+rules (such as those required by a particular application or set of
+applications, possibly specified as an ALDR Profile).
 
-An Application Profile is intended to be used in conjunction with an
+ALDR rules are intended to be used in conjunction with an
 application, which typically will use a subset of the CBOR generic
 data model, which in turn
-influences which subset of the application profile is used.
-As a result, an Application Profile itself places no direct
+influences which subset of the ALDR rules is used by the application
+(in particular if the application simply references a more general
+ALDR profile).
+As a result, ALDR rules themselves place no direct
 requirement on what minimum subset of CBOR is implemented.
-For instance, an application profile might define rules for the
+For instance, a set of ALDR rules might include rules for the
 processing of floating point values, but there is no requirement that
-implementations of that Application Profile support floating point
+implementations of that set of ALDR rules support floating point
 numbers (or any other kind of number, such as arbitrary precision
 integers or 64-bit negative integers) when they are used with
 applications that do not use them.
@@ -281,6 +313,19 @@ applications that do not use them.
 --- middle
 
 # CDDL support
+
+CDDL defines the structure of CBOR data items at the data model level;
+it enables being specific about the data items allowed in a particular
+place.
+It does not specify encoding, but CBOR protocols can specify the use
+of CDE (or simply Basic Serialization).
+For instance, it allows the specification of a floating point data item
+as "float16"; this means the application data model only foresees data
+that can be encoded as {{IEEE754}} binary16.
+Note that specifying "float32" for a floating point data item enables
+all floating point values that can be represented as binary32; this
+includes values that can also be represented as binary16 and that will
+be so represented in Basic Serialization.
 
 {{-cddl}} defines control operators to indicate that the contents of a
 byte string carries a CBOR-encoded data item (`.cbor`) or a sequence of
@@ -312,8 +357,8 @@ sequence.  If a use case for such a feature becomes known, it could be
 added.)
 
 
-Obviously, Application Profiles can define related control operators
-that also embody the processing required by the Application Profile,
+Obviously, specifications that document ALDR rules can define related control operators
+that also embody the processing required by those ALDR rules,
 and are encouraged to do so.
 
 
@@ -380,10 +425,12 @@ Notes:
 * Preferred serialization and CDE only affect serialization.
   They do not place any requirements, exclusions, mappings or such on
   the data model level.
-  Application profiles such as dCBOR are different as they can affect
+  Sets of ALDR rules such as the dCBOR ALDR Profile are different as they can affect
   the data model by restricting some values and ranges.
 
-* CBOR decoders in general are not required to check for preferred
+* CBOR decoders in general (as opposed to "CDE decoders" specifically
+  advertised as supporting CDE)
+  are not required to check for preferred
   serialization or CDE and reject inputs that do not fulfill
   their requirements.
   However, in an environment that employs deterministic encoding,
@@ -391,7 +438,7 @@ Notes:
   Decoder implementations that advertise "support" for preferred
   serialization or CDE need to check the encoding and reject
   input that is not encoded to the encoding specification in use.
-  Again, application profiles such as dCBOR may pose additional
+  Again, ALDR Profiles such as dCBOR may pose additional
   requirements, such as requiring rejection of non-conforming inputs.
 
   If a generic decoder needs to be used that does not "support" CDE, a
@@ -541,6 +588,12 @@ Preferred Serialization Decoder requirements.
    emitting duplicate keys in a major type 5 map as well as emitting
    only valid UTF-8 in major type 3 text strings.
 
+   Note also that CDE does NOT include a requirement for Unicode
+   normalization {{UAX-15}}; {{Section C of
+   ?I-D.bormann-dispatch-modern-network-unicode}} contains some
+   rationale that went into not requiring routine use of Unicode normalization
+   processes.
+
 ### CDE Decoders
 
 The term "CDE Decoder" is a shorthand for a CBOR decoder that
@@ -563,9 +616,8 @@ advertises _supporting_ CDE (see the start of this appendix).
 {:numbered="false"}
 
 An earlier version of this document was based on the work of Wolf
-McNally and Christopher Allen as documented in {{-dcbor-orig}}; more
-recent revisions of that document now make use of the present document
-and the concept of Application Profile.
+McNally and Christopher Allen as documented in {{-dcbor}}, which
+serves as an example for an ALDR Profile.
 We would like to explicitly acknowledge that this work has
 contributed greatly to shaping the concept of a CBOR Common
-Deterministic Encoding and Application Profiles on top of that.
+Deterministic Encoding and ALDR rules/Profiles on top of that.
