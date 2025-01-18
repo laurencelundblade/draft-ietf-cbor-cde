@@ -60,6 +60,8 @@ informative:
     rc: Unicode Standard Annex #15
     target: https://unicode.org/reports/tr15/
     date: false
+  RFC8392: cwt
+  RFC9581: tag1001
 
 --- abstract
 
@@ -258,13 +260,51 @@ encoding decisions for byte strings that carry embedded CBOR.
 
 This appendix is informative.
 
-While the CDE provides
-for commonality between different applications of CBOR, for an
-application or a group of applications it can be useful
-to further constrain the set of data items handled (_exclusions_)
-and to define further mappings
-(_reductions_) that help the application(s) get by with
-the exclusions.
+CBOR application protocols are agreements about how to use CBOR for a
+specific application or set of applications.
+Application protocols make representation decisions in order to
+constrain the variety of ways in which some aspect of the information
+model could be represented in the CBOR data model for the application.
+For instance, there are several CBOR tags that can be used to
+represent a time stamp (such as 0, 1, 1001), each with some specific
+properties.
+Application protocols that need to represent a timestamp typically
+choose a specific tag and further constrain its use where necessary
+(e.g., tag 1001 was designed to cover a wide variety of applications
+{{-tag1001}}).
+Where no tag is available, the application protocol can design its own
+format for some application data.
+Even where a tag is available, the application data can choose to use
+its definitions without actually encoding the tag (e.g., by using its
+content in specific places in an "unwrapped" form).
+For instance, CWT defines an application data type "NumericDate"
+which is formed by "unwrapping" tag 1 (see {{Sections 2 and 5 of -cwt}}).
+
+CWT does not use deterministic encoding.
+Applications that do, and that derive CBOR data items from application data
+without maintaining a record of which choices are to be made when
+representing these application data, generally make rules for these
+choices as part of the application protocol.
+In this document, we speak about these choices as Application-Level
+Deterministic Representation Rules (ALDR for short).
+For example, a hypothetical variant of CWT that makes use of
+deterministic encoding will need to make an ALDR for NumericDate: the
+definition of tag 1 allows both integer and floating point numbers
+({{Section 3.4.2 of RFC8949@-cbor}}), and the application rules may
+choose to only use integers, or to always use integers when the
+numeric value can be represented as such without loss of information,
+or to always use floating point numbers, or some of these for some
+application data and different ones for other application data.
+
+CDE provides for encoding commonality between different applications
+of CBOR once these application-level choices have been made.
+It can be useful for an application or a group of applications to
+document their choices aimed at deterministic representation of
+application data in a general way, constraining the set of data items
+handled (_exclusions_) and defining further mappings (_reductions_)
+that help the application(s) get by with the exclusions.
+This can be done in the application protocol specification (similar to
+the way CWT defines NumericDate) or as a separate document.
 
 For example, the dCBOR specification {{-dcbor}} specifies the use of CDE
 together with some application-level rules, i.e., an ALDR ruleset, such as a
@@ -274,7 +314,7 @@ non-NFC data at the application level, and it invites implementing a _reduction_
 routine normalization of text strings.
 
 ALDR rules (including rules specified in a ALDR ruleset document) enable
-simply using the shared CDE; they do not
+simply using implementations of the common CDE; they do not
 "fork" CBOR in the sense of requiring distinct generic encoder/decoder
 implementations.
 
