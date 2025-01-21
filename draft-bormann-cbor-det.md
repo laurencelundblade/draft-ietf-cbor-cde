@@ -1,8 +1,8 @@
 ---
 v: 3
 
-title: "CBOR: On Deterministic Encoding"
-abbrev: "On Deterministic Encoding"
+title: "CBOR: On Deterministic Encoding and Representation"
+abbrev: "On Deterministic Encoding/Representation"
 docname: draft-bormann-cbor-det-latest
 
 category: info
@@ -41,6 +41,7 @@ normative:
   RFC8610: cddl
 
 informative:
+  RFC9679: thumb
   STD63:
     -: utf8
 #    =: RFC3629
@@ -92,7 +93,7 @@ informative:
     CBOR (STD 94, RFC 8949) defines "Deterministically Encoded CBOR" in
     its Section 4.2.  The present document provides additional information
     about use cases, deployment considerations, and implementation choices
-    for Deterministic Encoding.
+    for Deterministic Encoding and Representation.
 
 --- middle
 
@@ -144,10 +145,10 @@ considerations, and implementation choices for Deterministic Encoding;
 it is an informational document that however may still be cited where a
 single reference for the background of Deterministic Encoding is convenient.
 This document is intended to be used in conjunction with CBOR Common
-Deterministic Encoding (CDE, {{-cde}}), a normative specification for a
-deterministic encoding profile that was developed in order to allow
-generic CBOR implementations to provide common support for a variety
-of applications of deterministic encoding.
+Deterministic Encoding (CDE, {{-cde}}), a normative specification that
+clarifies {{Section 4.2 of RFC8949@STD94}} in order to allow
+fully generic CBOR implementations that can provide common support for
+a variety of applications of deterministic encoding.
 
 ## Conventions and Definitions
 
@@ -177,7 +178,31 @@ Deterministic Encoding:
   exact same encoding for equivalent inputs at the data model level.
   Similar to Preferred Serialization, the equivalence model as defined
   for the Basic Generic Data Model may be augmented by equivalence
-  rules defined for specific Tags (see also {{Section 2.1 of RFC8949@STD94}}).
+  rules defined for specific Tags (see also {{Section 2.1 of
+  RFC8949@STD94}}).
+
+Deterministic Encoding assumes that the application already has formed
+data items at the CBOR generic data model level, presumably in a way
+that satisfies its determinism requirements
+We add two terms to encompass the entire process from application data in
+platform and application specific forms towards an encoded CBOR data
+item:
+
+Deterministic Representation:
+: A representation process that employs application-layer processing
+  of data into deterministically formed CBOR data items and then
+  applies Deterministic Encoding to achieve a deterministic
+  representation of the application-layer data.
+
+Application-Layer Deterministic Representation (ALDR):
+: The part of Deterministic Representation that is not covered by
+  Deterministic Encoding.
+
+ALDR rules:
+: rules (or a ruleset) that achieves ALDR.
+  A CBOR protocol that is described in terms of data in some platform
+  or application specific form may set up ALDR rules to describe how
+  an ALDR of these data is achieved, as input to Deterministic Encoding.
 
 In this document, CBOR data items at the data model level are
 represented in the CBOR diagnostic notation ({{Section 8 of
@@ -265,7 +290,8 @@ However, in some cases, the signing input for a signature or a MAC may
 need to be derived from data at rest and/or specific transformations of
 the data that was interchanged.  Such a transformation is fraught with
 perils at the application level that may be exploited by attackers;
-this problem is outside the scope of the present document.
+the present document focuses on Deterministic Encoding and just
+mentions ALDR rules as a way to manage required application processing.
 Deterministic Encoding may remove one potential source of variability
 that might make signatures or MACs useless between systems.
 
@@ -349,7 +375,7 @@ Whether the first two are exactly equivalent or not is the subject of
 
 If the additional semantics conveyed by the `time-offset` ({{Section
 5.6 of RFC3339}}) is not relevant to the application, an
-application-specific rule may be needed to convert text-based
+application-specific (ALDR) rule may be needed to convert text-based
 timestamps into the "Z" form before encoding.
 Some applications may also process this timestamp as `1(1382565143)`,
 losing the additional semantics as well, and using a quite different form.
@@ -613,10 +639,10 @@ Often, and particularly with integer and string keys, it may not be
 necessary to actually build a deterministically encoded data item for
 a map key to perform the overall map content ordering.
 
-# Application Profiles of Deterministic Encoding
+# Application Rules for Deterministic Representation (ALDR Rules)
 
 To enable the use of generic encoders,
-applications are encouraged to define rules for representing
+applications are encouraged to define (ALDR) rules for representing
 application information in the CBOR generic data model that enable
 the use of Preferred Encoding on that level as well.
 
@@ -637,7 +663,7 @@ Application-specific deterministic encoding rules can make it
 difficult to use existing generic encoders and may therefore diminish
 the value of using a standard representation format.
 
-Instead, applications can define transformations of their data
+Instead, applications can define (ALDR) transformations of their data
 into a more limited data model that reduces the cases the
 Deterministic Encoding rules have to implement.
 This allows both the following implementation choices:
@@ -648,7 +674,9 @@ rule implementations after some application processing, or
 implementation of the application transformations.
 
 The next subsection describes some of the considerations that led to
-one such application profile for Deterministic Encoding.
+one such application-layer specification for deterministic
+representation at the data model level, building on CDE for
+deterministic encoding of these data.
 
 ## Numeric Reduction in dCBOR {#reduction}
 
@@ -676,10 +704,10 @@ less well integrated into the language and existing libraries than the
 more well-established general numeric type.)
 
 Within the CBOR working group of the IETF, the dCBOR specification
-prompted a discussion about profiles for deterministic encoding, which
+prompted a discussion about "profiles" for deterministic encoding, which
 led to the CBOR Common Deterministic Encoding (CDE) specification
-{{-cde}} and the concept of a deterministic encoding *application
-profile* ({{Section 3 of -cde}}).
+{{-cde}} and the concept of rulesets for deterministic representation
+at the application data model level (ALDR, see {{Appendix A of -cde}}).
 Without help of the CDE specification at the time, an early version of
 the dCBOR specification restated much of {{Section 4.2 of
 RFC8949@STD94}} and added a rule that gets in the way of compatibility
@@ -699,6 +727,21 @@ These may then require special handling in the application data model.
 It is generally difficult to
 rely on exact equality of floating point values, which however is what
 Deterministic Encoding requires.
+
+## ALDR in {{-thumb}}
+
+{{-thumb}} describes a process that derives a deterministic thumbprint
+from a COSE Key {{-cose}}.
+{{Section 4 of -thumb}} defines the application-layer subsetting that is
+applied to the COSE Key to derive the input for the deterministic
+encoding that finally supplies the input to a hashing process; this
+section essentially serves as the ALDR ruleset for this specification.
+The paragraph at the end of {{Section 4.2 of -thumb}} is an example for
+an application-specific *reduction*: the ALDR ruleset only allows
+uncompressed point representations, and it therefore needs a process
+to derive these: "if an implementation uses the compressed point
+representation, it MUST first convert it to the uncompressed form for
+the purpose of thumbprint calculation".
 
 # Using Deterministically Encoded CBOR as a Deterministic Encoding of JSON
 
