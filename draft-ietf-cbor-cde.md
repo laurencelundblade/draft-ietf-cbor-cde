@@ -653,6 +653,9 @@ advertises _supporting_ CDE (see the start of this appendix).
    special diagnostic channels with no potential for confusion with a
    correctly CDE-decoded data item).
 
+
+{::include-all cde-lists.md}
+
 # Acknowledgments
 {:numbered="false"}
 
