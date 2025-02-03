@@ -392,7 +392,7 @@ More importantly, if the encoded data item also needs to have a
 specific structure, this can be expressed by the right-hand side
 (instead of using the most general CDDL type `any` here).
 
-(Note that the `.cborseq` control operator does not enable specifying
+(Note that the `.cdeseq` control operator does not enable specifying
 different deterministic encoding requirements for the elements of the
 sequence.  If a use case for such a feature becomes known, it could be
 added.)
