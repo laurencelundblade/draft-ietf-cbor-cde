@@ -1,4 +1,4 @@
 # Automatically generated CODEOWNERS
 # Regenerate with `make update-codeowners`
-draft-bormann-cbor-dcbor.md cabo@tzi.org
 draft-bormann-cbor-det.md cabo@tzi.org
+draft-ietf-cbor-cde.md cabo@tzi.org
