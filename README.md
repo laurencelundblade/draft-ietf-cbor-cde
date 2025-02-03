@@ -1,29 +1,21 @@
-# CBOR Deterministic Encoding Drafts
+# CBOR Drafts
 
-[Access to branches](https://cbor-wg.github.io/draft-ietf-cbor-cde)
+This is the working area for individual Internet-Drafts.
 
-## CBOR Common Deterministic Encoding (CDE) -- WG document
+## CBOR: On Deterministic Encoding and Representation
 
-* [Editor's Copy](https://cbor-wg.github.io/draft-ietf-cbor-cde/#go.draft-ietf-cbor-cde.html)
-* [Datatracker Page](https://datatracker.ietf.org/doc/draft-ietf-cbor-cde)
-* [Individual Draft](https://datatracker.ietf.org/doc/html/draft-ietf-cbor-cde)
-* [Compare Editor's Copy to Individual Draft](https://cbor-wg.github.io/draft-ietf-cbor-cde/#go.draft-ietf-cbor-cde.diff)
-
-
-## Related Individual Internet-Drafts from Carsten Bormann
-
-### The CDE-based Application Profile dCBOR
-
-This draft has been replaced by
-[draft-mcnally-deterministic-cbor](https://datatracker.ietf.org/doc/draft-mcnally-deterministic-cbor),
-with [github repo here](https://github.com/BlockchainCommons/WIPs-IETF-draft-deterministic-cbor).
-
-### CBOR: On Deterministic Encoding (Explainer)
-
-* [Editor's Copy](https://cbor-wg.github.io/draft-ietf-cbor-cde/#go.draft-bormann-cbor-det.html)
+* [Editor's Copy](https://cabo.github.io/det/#go.draft-bormann-cbor-det.html)
 * [Datatracker Page](https://datatracker.ietf.org/doc/draft-bormann-cbor-det)
 * [Individual Draft](https://datatracker.ietf.org/doc/html/draft-bormann-cbor-det)
-* [Compare Editor's Copy to Individual Draft](https://cbor-wg.github.io/draft-ietf-cbor-cde/#go.draft-bormann-cbor-det.diff)
+* [Compare Editor's Copy to Individual Draft](https://cabo.github.io/det/#go.draft-bormann-cbor-det.diff)
+
+## CBOR Common Deterministic Encoding (CDE)
+
+* [Editor's Copy](https://cabo.github.io/det/#go.draft-ietf-cbor-cde.html)
+* [Datatracker Page](https://datatracker.ietf.org/doc/draft-ietf-cbor-cde)
+* [Individual Draft](https://datatracker.ietf.org/doc/html/draft-ietf-cbor-cde)
+* [Compare Editor's Copy to Individual Draft](https://cabo.github.io/det/#go.draft-ietf-cbor-cde.diff)
+
 
 ## Contributing
 
