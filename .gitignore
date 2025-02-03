@@ -3,14 +3,13 @@
 *.redxml
 *.swp
 *.txt
-*.xml
 *.upload
 *~
 .tags
 /*-[0-9][0-9].xml
+/.*.mk
 /.gems/
 /.refcache
-/.targets.mk
 /.venv/
 /.vscode/
 /lib
@@ -18,8 +17,8 @@
 /versioned/
 Gemfile.lock
 archive.json
-draft-bormann-cbor-dcbor.xml
 draft-bormann-cbor-det.xml
+draft-ietf-cbor-cde.xml
 package-lock.json
 report.xml
 !requirements.txt
