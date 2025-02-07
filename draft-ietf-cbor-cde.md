@@ -150,7 +150,7 @@ when the focus is on that.
 # Encoding Choices in CBOR {#choi}
 
 In many cases, CBOR provides more than one way to encode a data item,
-i.e., serialize it into a sequence of bytes.
+i.e., to serialize it into a sequence of bytes.
 This flexibility can provide convenience for the generator of the
 encoded data item, but handling the resulting variation can also put
 an onus on the decoder.
