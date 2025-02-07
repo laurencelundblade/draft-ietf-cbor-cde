@@ -181,7 +181,7 @@ further reduce the variability that needs to be handled by decoders,
 potentially maximizing interoperability with partial (e.g.,
 constrained) CBOR decoder implementations.
 
-These constraints still allow some variation, in particular, there is
+These constraints still allow some variation. In particular, there is
 more than one serialization for data items that contain maps: The
 order of serialization of map entries is ignored in CBOR (as it is in
 JSON), so maps with more than one entry have all permutations of these
