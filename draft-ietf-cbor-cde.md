@@ -214,7 +214,7 @@ We speak of the need for Application-level Deterministic
 Representation (ALDR), and we may want to aid achieving this by
 the application defining rules for ALDR (see also {{aldr}}).
 Where Deterministic Representation is not actually needed,
-Application-level representation rules of course can still be useful
+application-level representation rules of course can still be useful
 to amplify the benefits of Preferred or Basic Serialization.
 
 # CBOR Common Deterministic Encoding Profile (CDE) {#dep}
