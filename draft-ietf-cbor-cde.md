@@ -154,7 +154,7 @@ i.e., to serialize it into a sequence of bytes.
 This flexibility can provide convenience for the generator of the
 encoded data item, but handling the resulting variation can also put
 an onus on the decoder.
-There is no one perfect encoding choice that is optimal for all
+In general, there is no single perfect encoding choice that is optimal for all
 applications.
 Choosing the right constraints on these encoding choices is one
 element of application protocol design.
