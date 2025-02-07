@@ -158,7 +158,7 @@ In general, there is no single perfect encoding choice that is optimal for all
 applications.
 Choosing the right constraints on these encoding choices is one
 element of application protocol design.
-Defining predefined sets of such choices is a useful way to reduce
+Having predefined sets of such choices is a useful way to reduce
 variation between applications, enabling generic implementations.
 
 {{Section 4.1 of RFC8949@-cbor}} provides a recommendation for a
