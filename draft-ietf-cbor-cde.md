@@ -212,7 +212,7 @@ application itself does not generate multiple different CBOR data
 items that represent that same (equivalent) application data item.
 We speak of the need for Application-level Deterministic
 Representation (ALDR), and we may want to aid achieving this by
-the application defining rules for ALDR (see also {#aldr}).
+the application defining rules for ALDR (see also {{aldr}}).
 Where Deterministic Representation is not actually needed,
 Application-level representation rules of course can still be useful
 to amplify the benefits of Preferred or Basic Serialization.
