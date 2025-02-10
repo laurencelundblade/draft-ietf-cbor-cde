@@ -770,3 +770,5 @@ serves as an example for an ALDR ruleset document.
 We would like to explicitly acknowledge that this work has
 contributed greatly to shaping the concept of a CBOR Common
 Deterministic Encoding and ALDR rules/rulesets on top of that.
+Mikolai Gütschow proposed adding {{choi}}.
+
